@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>AutoGrid Planner - Team 785Z</title>
+  <link rel="icon" type="image/x-icon" href="AutoGridLogo.ico">
+  <link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <div class="title">AutoGrid Planner <span class="team-name">by team 785Z</span> <a href="https://github.com/parkerrasys/AutoGrid-Planner" target="_blank" class="version-tag">v0.1.2</a> <a href="https://github.com/parkerrasys/AutoGrid" target="_blank" class="github-link">AutoGrid</a></div>
+      <div class="project-title">
+        Name:<span id="pathName" class="path-name" onclick="editPathName()" title="Click to edit">Untitled</span>
+        <div class="recent-paths-container">
+          Recent Paths: <select id="recentPaths" onchange="loadRecentPath(this.value)">
+            <option value="">Recent Paths</option>
+          </select>
+          <button class="delete-recent" onclick="deleteSelectedPath()">Delete</button>
+        </div>
+      </div>
+      <div class="header-buttons">
+        <button onclick="importPath()">Import Path</button>
+        <button onclick="clearPath()">New Path</button>
+        <select id="themeSelector" onchange="changeTheme(this.value)">
+          <option value="dark">Default Dark</option>
+          <option value="light">Default Light</option>
+          <option value="midnight">Midnight Dream</option>
+          <option value="ocean">Ocean Breeze</option>
+          <option value="forest">Forest Mist</option>
+          <option value="sunset">Sunset Vibes</option>
+          <option value="retro">Retro Wave</option>
+          <option value="nord">Nordic Frost</option>
+          <option value="mocha">Mocha Blend</option>
+          <option value="cyber">Cyber Punk</option>
+        </select>
+      </div>
+    </header>
+    <main>
+      <div class="sidebar">
+        <div class="sidebar-buttons">
+          <button onclick="undo()">Undo</button>
+          <button onclick="redo()">Redo</button>
+          <button onclick="clearCurrentPath()" class="clear-button">Clear</button>
+        </div>
+        <div class="points-list" id="pointsList"></div>
+        <div class="action-buttons">
+          <button onclick="exportPath()">Export</button>
+          <button onclick="buildPath()">Build</button>
+        </div>
+      </div>
+      <div class="grid-container">
+        <canvas id="grid"></canvas>
+      </div>
+    </main>
+  </div>
+  <script src="script.js"></script>
+</body>
+
+</html>
