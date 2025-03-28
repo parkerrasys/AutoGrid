@@ -1602,7 +1602,13 @@ function simulatePath() {
       }
     } else {
       if (nextMovePoint) {
-        progress += moveSpeed * deltaTime;
+        const lastMovePoint = [...points].slice(0, currentPoint + 1).reverse().find(p => !p.type);
+        const dx = nextMovePoint.x - lastMovePoint.x;
+        const dy = nextMovePoint.y - lastMovePoint.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        
+        // Adjust progress based on actual distance
+        progress += (moveSpeed * deltaTime) / (distance || 1);
 
         if (progress >= 1) {
           robotX = nextMovePoint.x;
@@ -1613,9 +1619,8 @@ function simulatePath() {
             isRotating = true;
           }
         } else {
-          const lastMovePoint = [...points].slice(0, currentPoint + 1).reverse().find(p => !p.type);
-          robotX = lastMovePoint.x + (nextMovePoint.x - lastMovePoint.x) * progress;
-          robotY = lastMovePoint.y + (nextMovePoint.y - lastMovePoint.y) * progress;
+          robotX = lastMovePoint.x + dx * progress;
+          robotY = lastMovePoint.y + dy * progress;
         }
       } else {
         currentPoint++;
