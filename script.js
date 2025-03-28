@@ -1,4 +1,3 @@
-//script.js
 let points = [];
 let undoStack = [];
 let redoStack = [];
@@ -143,6 +142,7 @@ function canvasToGrid(x, y) {
 let previewPoint = null;
 
 function updatePreviewPoint(e) {
+  if (!window.previewEnabled) return;
   if (document.getElementById('pathName').textContent === 'No File') {
     const tooltip = createNoPathTooltip('No Path Selected');
     tooltip.style.display = 'block';
@@ -415,7 +415,22 @@ function showContextMenu(e) {
           points.push({ x: gridPos.x, y: gridPos.y, type: 'lookAt' });
           updatePointsList();
           drawGrid();
-          updateSimulationButton(); // Added to update button state
+          updateSimulationButton();
+        }
+      },
+      {
+        text: 'Clear Path',
+        action: () => clearCurrentPath()
+      },
+      {
+        text: 'Toggle Preview',
+        action: () => {
+          window.previewEnabled = !window.previewEnabled;
+          localStorage.setItem('previewEnabled', window.previewEnabled);
+          if (!window.previewEnabled) {
+            previewPoint = null;
+            drawGrid();
+          }
         }
       },
       {
@@ -682,6 +697,7 @@ function drawRobotDiagram(robotWidth, robotLength) {
 }
 
 window.onload = function() {
+  window.previewEnabled = localStorage.getItem('previewEnabled') !== 'false';
   initGrid();
   updateRobotConfig();
   updateSimulationButton(); // Initial update
