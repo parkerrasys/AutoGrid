@@ -1,3 +1,4 @@
+//script.js
 let points = [];
 let undoStack = [];
 let redoStack = [];
