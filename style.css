@@ -12,6 +12,7 @@
   --border-color: #4c4c4c;
   --grid-color: #252525;
   --tile-color: #1a1a1a;
+  --pointlist-bg: #3c3c3c;
 }
 
 /* Default Light */
@@ -28,6 +29,7 @@
   --border-color: #cccccc;
   --grid-color: #e0e0e0;
   --tile-color: #f0f0f0;
+  --pointlist-bg: #3c3c3c;
 }
 
 /* Midnight Dream */
@@ -44,6 +46,7 @@
   --border-color: #565f89;
   --grid-color: #292e42;
   --tile-color: #1f2335;
+  --pointlist-bg: #3c3c3c;
 }
 
 /* Ocean Breeze */
@@ -60,6 +63,7 @@
   --border-color: #3f5876;
   --grid-color: #1e2f45;
   --tile-color: #152334;
+  --pointlist-bg: #3c3c3c;
 }
 
 /* Forest Mist */
@@ -76,9 +80,10 @@
   --border-color: #4d6357;
   --grid-color: #2d3f36;
   --tile-color: #1e2c25;
+  --pointlist-bg: #3c3c3c;
 }
 
-/* Sunset Vibes */
+/* Too Mucn Purple */
 [data-theme="sunset"] {
   --bg-primary: #2d1b2a;
   --bg-secondary: #432740;
@@ -92,6 +97,7 @@
   --border-color: #6d4367;
   --grid-color: #3d2539;
   --tile-color: #2a1827;
+  --pointlist-bg: #3c3c3c;
 }
 
 /* Retro Wave */
@@ -108,9 +114,10 @@
   --border-color: #3b3e4f;
   --grid-color: #1e202a;
   --tile-color: #191a20;
+  --pointlist-bg: #3c3c3c;
 }
 
-/* Nordic Frost */
+/* Classic Grey */
 [data-theme="nord"] {
   --bg-primary: #2e3440;
   --bg-secondary: #3b4252;
@@ -124,9 +131,10 @@
   --border-color: #4c566a;
   --grid-color: #353c4a;
   --tile-color: #2b303b;
+  --pointlist-bg: #3c3c3c;
 }
 
-/* Mocha Blend */
+/* Midnight Purple */
 [data-theme="mocha"] {
   --bg-primary: #1e1e2e;
   --bg-secondary: #302d41;
@@ -140,6 +148,7 @@
   --border-color: #585b70;
   --grid-color: #282839;
   --tile-color: #1a1a27;
+  --pointlist-bg: #3c3c3c;
 }
 
 /* Cyber Punk */
@@ -156,6 +165,53 @@
   --border-color: #233554;
   --grid-color: #061325;
   --tile-color: #000814;
+  --pointlist-bg: #3c3c3c;
+}
+
+/* Dev's Preference - Red/black */
+[data-theme="devpref"] {
+  --bg-primary: #0a0a0a;
+  --bg-secondary: #1a1a1a;
+  --bg-tertiary: #2a2a2a;
+  --text-primary: #ffffff;
+  --text-secondary: #cccccc;
+  --accent-color: #ff1e1e;
+  --accent-hover: #cc0000;
+  --danger-color: #ff4444;
+  --danger-hover: #cc0000;
+  --border-color: #ff3d3d;
+  --grid-color: #151515;
+  --tile-color: #0f0f0f;
+  --pointlist-bg: #1f1f1f;
+}
+
+[data-theme="devpref"] button {
+  background: #ff1e1e;
+  border: 2px solid #cc0000;
+}
+
+[data-theme="devpref"] button:hover {
+  background: #cc0000;
+}
+
+[data-theme="devpref"] .grid-container {
+  border: 2px solid #ff1e1e;
+}
+
+[data-theme="devpref"] .point-item {
+  border: 1px solid #ff1e1e;
+}
+
+[data-theme="devpref"] .sidebar-buttons {
+  border-bottom: 2px solid #ff1e1e;
+}
+
+[data-theme="devpref"] .action-buttons {
+  border-top: 2px solid #ff1e1e;
+}
+
+::-webkit-scrollbar {
+  display: none;
 }
 
 body {
@@ -304,12 +360,21 @@ main {
   overflow: hidden;
 }
 
-.sidebar {
+.left-sidebar {
   width: 325px;
   background: var(--bg-secondary);
   display: flex;
   flex-direction: column;
   border-right: 1px solid var(--border-color);
+  align-items: center;
+}
+
+.right-sidebar {
+  width: 325px;
+  background: var(--bg-secondary);
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid var(--border-color);
   align-items: center;
 }
 
@@ -401,4 +466,69 @@ button:hover {
   color: white;
   padding: 4px;
   border-radius: 2px;
+}
+
+.robot-config {
+  padding: 15px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.robot-dimensions {
+  background: var(--bg-tertiary);
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.dimension-input {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.dimension-input:last-child {
+  margin-bottom: 0;
+}
+
+.dimension-input label {
+  flex: 1;
+  color: var(--text-secondary);
+}
+
+.dimension-input input,
+.dimension-input select {
+  width: 80px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 8px;
+  border-radius: 4px;
+}
+
+.dimension-input select {
+  width: 160px;
+  cursor: pointer;
+}
+
+.robot-diagram-container {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.robot-diagram-container h4 {
+  margin: 0 0 10px 0;
+  color: var(--text-secondary);
+}
+
+.diagram-info {
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+#robotDiagram {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
 }

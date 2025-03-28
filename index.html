@@ -12,7 +12,9 @@
 <body>
   <div class="container">
     <header>
-      <div class="title">AutoGrid Planner <span class="team-name">by team 785Z</span> <a href="https://github.com/parkerrasys/AutoGrid-Planner" target="_blank" class="version-tag">v0.1.2</a> <a href="https://github.com/parkerrasys/AutoGrid" target="_blank" class="github-link">AutoGrid</a></div>
+      <div class="title">AutoGrid Planner <span class="team-name">by team 785Z</span> <a
+          href="https://github.com/parkerrasys/AutoGrid-Planner" target="_blank" class="version-tag">v0.1.2</a> <a
+          href="https://github.com/parkerrasys/AutoGrid" target="_blank" class="github-link">AutoGrid</a></div>
       <div class="project-title">
         Name:<span id="pathName" class="path-name" onclick="editPathName()" title="Click to edit">Untitled</span>
         <div class="recent-paths-container">
@@ -23,24 +25,26 @@
         </div>
       </div>
       <div class="header-buttons">
-        <button onclick="importPath()">Import Path</button>
         <button onclick="clearPath()">New Path</button>
+        <button onclick="importPath()">Import Path</button>
+        <button onclick="importSharePath()">Import Share Path</button>
         <select id="themeSelector" onchange="changeTheme(this.value)">
           <option value="dark">Default Dark</option>
           <option value="light">Default Light</option>
           <option value="midnight">Midnight Dream</option>
           <option value="ocean">Ocean Breeze</option>
           <option value="forest">Forest Mist</option>
-          <option value="sunset">Sunset Vibes</option>
+          <option value="sunset">Too Much Purple</option>
           <option value="retro">Retro Wave</option>
-          <option value="nord">Nordic Frost</option>
-          <option value="mocha">Mocha Blend</option>
+          <option value="nord">Classic Grey</option>
+          <option value="mocha">Midnight Purple</option>
           <option value="cyber">Cyber Punk</option>
+          <option value="devpref">Dev's Preference</option>
         </select>
       </div>
     </header>
     <main>
-      <div class="sidebar">
+      <div class="left-sidebar">
         <div class="sidebar-buttons">
           <button onclick="undo()">Undo</button>
           <button onclick="redo()">Redo</button>
@@ -49,11 +53,50 @@
         <div class="points-list" id="pointsList"></div>
         <div class="action-buttons">
           <button onclick="exportPath()">Export</button>
+          <button onclick="sharePaths()">Share</button>
           <button onclick="buildPath()">Build</button>
         </div>
       </div>
       <div class="grid-container">
         <canvas id="grid"></canvas>
+      </div>
+      <div class="right-sidebar">
+        <div class="sidebar-buttons">
+          Robot Configuration Settings
+        </div>
+        <div class="robot-config">
+          <div class="robot-dimensions">
+            <div class="dimension-input">
+              <label>Length (inches):</label>
+              <input type="number" id="robotLength" value="18" min="5" max="18" step="0.5" onchange="updateRobotConfig()">
+            </div>
+            <div class="dimension-input">
+              <label>Width (inches):</label>
+              <input type="number" id="robotWidth" value="18" min="5" max="18" step="0.5" onchange="updateRobotConfig()">
+            </div>
+            <div class="dimension-input">
+              <label>Move Speed (in/s):</label>
+              <input type="number" id="moveSpeed" value="50" min="1" max="200" step="1">
+            </div>
+            <div class="dimension-input">
+              <label>Turn Speed (deg/s):</label>
+              <input type="number" id="turnSpeed" value="180" min="1" max="720" step="1">
+            </div>
+            <div class="dimension-input">
+              <label>LookAt Pause (s):</label>
+              <input type="number" id="lookAtPause" value="0.5" min="0" max="5" step="0.1">
+            </div>
+          </div>
+          <div class="robot-diagram-container">
+            <canvas id="robotDiagram"></canvas>
+          </div>
+        </div>
+        <div class="action-buttons">
+          <button onclick="simulatePath()" id="simButton">Simulate Path</button>
+          <button onclick="toggleSimulation()" id="pauseButton" style="display: none;">Pause</button>
+          <button onclick="stopSimulation()" id="stopButton" style="display: none;">Stop</button>
+          <button onclick="loopSimulation()" id="loopButton">Loop: Off</button>
+        </div>
       </div>
     </main>
   </div>
