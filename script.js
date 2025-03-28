@@ -142,18 +142,18 @@ function canvasToGrid(x, y) {
 let previewPoint = null;
 
 function updatePreviewPoint(e) {
-  if (!window.previewEnabled) return;
+  const rect = canvas.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+  
   if (document.getElementById('pathName').textContent === 'No File') {
     const tooltip = createNoPathTooltip('No Path Selected');
     tooltip.style.display = 'block';
     tooltip.style.left = (e.clientX + 10) + 'px';
     tooltip.style.top = (e.clientY - tooltip.offsetHeight - 5) + 'px';
-    return;
+  } else if (window.previewEnabled) {
+    previewPoint = canvasToGrid(x, y);
   }
-  const rect = canvas.getBoundingClientRect();
-  const x = e.clientX - rect.left;
-  const y = e.clientY - rect.top;
-  previewPoint = canvasToGrid(x, y);
   drawGrid();
 }
 
@@ -448,17 +448,30 @@ function showContextMenu(e) {
       {
         text: 'Share Path',
         action: () => sharePaths()
+      },
+      {
+        text: 'Delete Path',
+        action: () => deleteSelectedPath(),
+        style: 'color: #ff4444;'
       }
     );
   }
 
   menuItems.forEach(item => {
     const menuItem = document.createElement('div');
-    menuItem.style.cssText = `
-      padding: 5px 20px;
-      cursor: pointer;
-      color: white;
-    `;
+    if (item.style) {
+      menuItem.style.cssText = `
+        padding: 5px 20px;
+        cursor: pointer;
+        ${item.style}
+      `;
+    } else {
+      menuItem.style.cssText = `
+        padding: 5px 20px;
+        cursor: pointer;
+        color: white;
+      `;
+    }
     menuItem.textContent = item.text;
     menuItem.onmouseover = () => menuItem.style.background = '#3498db';
     menuItem.onmouseout = () => menuItem.style.background = 'transparent';
@@ -1220,6 +1233,8 @@ function handleImport() {
   try {
     if (codeInput.value.trim()) {
       const newPaths = parsePaths(codeInput.value.trim());
+      const wasEmpty = recentPaths.length === 0;
+      
       newPaths.forEach(path => {
         let newName = path.name;
         let counter = 1;
@@ -1229,6 +1244,17 @@ function handleImport() {
         }
         addToRecentPaths(newName, path.points);
       });
+
+      // If there were no paths before import, set the first imported path
+      if (wasEmpty && newPaths.length > 0) {
+        const pathNameElement = document.getElementById('pathName');
+        pathNameElement.textContent = recentPaths[0].name;
+        pathNameElement.style.cursor = 'pointer';
+        pathNameElement.onclick = editPathName;
+        points = [...recentPaths[0].points];
+        updatePointsList();
+        drawGrid();
+      }
     }
     closePopup();
     updateSimulationButton(); // Update button after import
