@@ -16,22 +16,3 @@
     <div style="display: none; position: absolute; bottom: -40px; left: 50%; transform: translateX(-50%); background-color: black; color: white; padding: 5px 10px; border-radius: 5px; font-size: 12px; white-space: nowrap; opacity: 0; z-index: 10;">Will redirect to AutoGrid Planner</div>
   </a>
 </div>
-
-<script>
-  const link = document.querySelector("a");
-  const img = link.querySelector("img");
-  const tooltip = link.querySelector("div");
-
-  // Add hover effect for the image and tooltip
-  link.addEventListener("mouseenter", () => {
-    img.style.filter = "brightness(70%)"; // Dim the image
-    tooltip.style.display = "block"; // Show tooltip
-    tooltip.style.opacity = "1"; // Fade in the tooltip
-  });
-
-  link.addEventListener("mouseleave", () => {
-    img.style.filter = ""; // Reset the image brightness
-    tooltip.style.display = "none"; // Hide tooltip
-    tooltip.style.opacity = "0"; // Fade out the tooltip
-  });
-</script>
