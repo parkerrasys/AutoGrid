@@ -214,6 +214,17 @@
   display: none;
 }
 
+header img {
+  width: 50px; /* Set the desired width for the logo */
+  height: auto; /* Maintain the aspect ratio */
+  display: inline-block; /* Ensures proper alignment */
+}
+
+.title {
+  margin: 0; /* Remove default margin around the text */
+  padding-left: 0px; /* Add slight spacing to the left if needed */
+}
+
 body {
   margin: 0;
   background: var(--bg-primary);
@@ -350,6 +361,11 @@ header {
 }
 
 .header-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.logo-title {
   display: flex;
   gap: 10px;
 }

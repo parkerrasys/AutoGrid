@@ -12,9 +12,14 @@
 <body>
   <div class="container">
     <header>
-      <div class="title">AutoGrid Planner <span class="team-name">by team 785Z</span> <a
-          href="https://github.com/parkerrasys/AutoGrid-Planner" target="_blank" class="version-tag">v0.1.2</a> <a
-          href="https://github.com/parkerrasys/AutoGrid" target="_blank" class="github-link">AutoGrid</a></div>
+      <div class="logo-title">
+        <img id="logo" src="AutoGridLogoIntro.gif" alt="AutoGridLogo">
+        <!-- <img src="AutoGridLogoIntro.gif" alt="AutoGridLogo">
+        <img src="AutoGridAnimationLoop.gif" alt="AutoGridLogo"> -->
+        <div class="title">AutoGrid Planner <span class="team-name">by team 785Z</span> <a
+        href="https://github.com/parkerrasys/AutoGrid-Planner" target="_blank" class="version-tag">v0.1.2</a> <a
+        href="https://github.com/parkerrasys/AutoGrid" target="_blank" class="github-link">AutoGrid</a></div>
+      </div>
       <div class="project-title">
         Name:<span id="pathName" class="path-name" onclick="editPathName()" title="Click to edit">Untitled</span>
         <div class="recent-paths-container">
@@ -101,6 +106,18 @@
     </main>
   </div>
   <script src="script.js"></script>
+  <script>
+    const delay = 1250;
+    const preloadImage = new Image();
+
+    preloadImage.src = "AutoGridAnimationLoop.gif";
+
+    const logoElement = document.getElementById("logo");
+    
+    setTimeout(() => {
+      logoElement.src = preloadImage.src;
+    }, delay);
+  </script>
 </body>
 
 </html>

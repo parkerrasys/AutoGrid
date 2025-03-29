@@ -1264,6 +1264,7 @@ function handleImport() {
   }
 }
 
+// Share Path Function
 function sharePaths() {
   if (document.getElementById('pathName').textContent === 'No File' || points.length === 0) {
     return;
@@ -1291,9 +1292,9 @@ function sharePaths() {
   popup.innerHTML = `
     <h3 style="margin-top: 0; color: #fff; text-align: center;">Share Paths</h3>
     <div style="margin: 20px 0;">
-      <div style="background: #2c2c2c; padding: 15px; border-radius: 6px;">
+      <div style="background: #2c2c2c; padding: 15px; border-radius: 6px; text-align: center;">
         <p style="margin: 0 0 10px 0; color: #fff;">Share Code:</p>
-        <textarea id="shareCode" readonly style="width: 100%; height: 80px; background: #3c3c3c; border: 1px solid #555; border-radius: 4px; color: #fff; padding: 8px; resize: none;">${shareCode}</textarea>
+        <textarea id="shareCode" readonly style="width: 75%; height: 80px; background: #3c3c3c; border: 1px solid #555; border-radius: 4px; color: #fff; padding: 8px; resize: none;">${shareCode}</textarea>
       </div>
     </div>
     <div style="display: flex; justify-content: flex-end; gap: 10px;">
@@ -1309,6 +1310,7 @@ function sharePaths() {
   overlay.addEventListener('click', closePopup);
 }
 
+// Share Code Import Function
 function importSharePath() {
   const overlay = createOverlay();
   document.body.appendChild(overlay);

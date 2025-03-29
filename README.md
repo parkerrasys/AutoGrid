@@ -1,6 +1,6 @@
 # AutoGrid Planner by team **785Z**
 ## [AUTOGRID PLANNER (LINK)](https://parkerrasys.github.io/AutoGrid-Planner/)
-[AutoGrid Repository](https://github.com/parkerrasys/AutoGrid) 
+[AutoGrid Repository](https://github.com/parkerrasys/AutoGrid/) 
 ### (A tool for easily laying out your AutoGrid path)
 
 ### Notes
