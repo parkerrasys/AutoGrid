@@ -10,6 +10,45 @@
 > This verison of the AutoGrid Planner has basic funtions such as drawing a path for your robot to follow.
 > You are currently only able to draw then build your code for auton, no funtions such as importing or exporting works yet!
 ** **
-<a href="https://parkerrasys.github.io/AutoGrid-Planner/" target="_blank">
-  <img style="width:10px;" src="https://github.com/user-attachments/assets/dc9531b7-a99f-4ac5-b29b-13b0ae5269df" alt="image">
+<a href="https://parkerrasys.github.io/AutoGrid-Planner/" target="_blank" class="hover-effect">
+  <img src="https://github.com/user-attachments/assets/dc9531b7-a99f-4ac5-b29b-13b0ae5269df" alt="image">
+  <span class="hover-text">Will redirect to AutoGrid Planner</span>
 </a>
+
+<style>
+  .hover-effect {
+    position: relative;
+    display: inline-block;
+    text-decoration: none;
+  }
+
+  .hover-effect img {
+    display: block;
+    transition: filter 0.3s ease;
+  }
+
+  .hover-effect:hover img {
+    filter: brightness(70%);
+  }
+
+  .hover-text {
+    display: none;
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: black;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .hover-effect:hover .hover-text {
+    display: block;
+    opacity: 1;
+  }
+</style>
