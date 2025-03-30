@@ -1,8 +1,8 @@
 @media (max-width: 1367px) {
     * {
-        transform: scale(.5);
+        transform: scale(1);
     }
-    
+
     ::-webkit-scrollbar {
       display: none;
     }
