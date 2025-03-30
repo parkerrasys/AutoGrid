@@ -1,4 +1,8 @@
 @media (max-width: 1367px) {
+    * {
+        transform: scale(.5);
+    }
+    
     ::-webkit-scrollbar {
       display: none;
     }
@@ -323,7 +327,7 @@
       gap: 10px;
       border-width: 5px 0px 5px 5px;
       border-style: solid;
-      border-color: #aa1100;
+      border-color: #00aaaa;
       border-radius: 10px 0px 0px 10px;
     }
 
