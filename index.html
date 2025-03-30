@@ -20,7 +20,7 @@
         <div class="title">AutoGrid Planner <span class="team-name">by team 785Z</span> <a
         href="https://github.com/parkerrasys/AutoGrid-Planner" target="_blank" class="version-tag">v0.1.2</a> <a
         href="https://github.com/parkerrasys/AutoGrid" target="_blank" class="github-link">AudoGrid</a> <a
-        href="https://docs.google.com/presentation/d/1aiBOhSg7OVF-M1JR4eFLC4Ffyx-BolteY37Xqyi4cFI/edit?usp=sharing" target="_blank" class="github-link">Documentation</a></div>
+        href="https://docs.google.com/presentation/d/1aiBOhSg7OVF-M1JR4eFLC4Ffyx-BolteY37Xqyi4cFI/edit?usp=sharing" target="_blank" class="doc-tag">Documentation</a></div>
       </div>
       <div class="project-title">
         Name:<span id="pathName" class="path-name" onclick="editPathName()" title="Click to edit">Untitled</span>
@@ -52,23 +52,55 @@
     </header>
     <main>
       <div class="left-sidebar">
-        <div class="sidebar-buttons">
+        <div class="top-bar">
           <button onclick="undo()">Undo</button>
           <button onclick="redo()">Redo</button>
           <button onclick="clearCurrentPath()" class="clear-button">Clear</button>
         </div>
         <div class="points-list" id="pointsList"></div>
-        <div class="action-buttons">
+        <div class="bottom-bar">
           <button onclick="exportPath()">Export</button>
           <button onclick="sharePaths()">Share</button>
           <button onclick="buildPath()">Build</button>
         </div>
       </div>
       <div class="grid-container">
-        <canvas id="grid"></canvas>
+        <div class="grid-container-top-bars">
+          <div class="top-bar">
+            Path Type:
+            <select id="pathTypeSelector" onchange="changePathType(this.value)">
+              <option value="direct-path">Direct</option>
+              <option value="generate-best-path">Generate</option>
+            </select>
+          </div>
+          <div class="top-bar">
+            Field Type:
+            <select id="fieldSelector" onchange="changeField(this.value)">
+              <option value="field-competition">Competition Field</option>
+              <option value="field-skills">Skills Field</option>
+            </select>
+            <select id="gameSelector" onchange="changeGame(this.value)">
+              <option value="high_stakes">High Stakes (Current)</option>
+              <option value="over_under">Over Under</option>
+            </select>
+          </div>
+        </div>
+        <div class="grid-canvas">
+          <div class="red-side-bar">
+            <div class="red-side-text">
+              RED
+            </div>
+          </div>
+          <canvas id="grid"></canvas>
+          <div class="blue-side-bar">
+            <div class="blue-side-text">
+              BLUE
+            </div>
+          </div>
+        </div>
       </div>
       <div class="right-sidebar">
-        <div class="sidebar-buttons">
+        <div class="top-bar">
           Robot Configuration Settings
         </div>
         <div class="robot-config">
@@ -98,7 +130,7 @@
             <canvas id="robotDiagram"></canvas>
           </div>
         </div>
-        <div class="action-buttons">
+        <div class="bottom-bar">
           <button onclick="simulatePath()" id="simButton">Simulate Path</button>
           <button onclick="toggleSimulation()" id="pauseButton" style="display: none;">Pause</button>
           <button onclick="stopSimulation()" id="stopButton" style="display: none;">Stop</button>
@@ -119,6 +151,25 @@
     setTimeout(() => {
       logoElement.src = preloadImage.src;
     }, delay);
+
+    const inputs = document.querySelectorAll('input[type="number"]');
+
+
+   //Scrolling for numbers (in here for editing/adjusting) 
+inputs.forEach((input) => {
+    input.addEventListener('wheel', (event) => {
+        event.preventDefault();
+        const step = parseFloat(input.step) || 1;
+        let currentValue = parseFloat(input.value) || 0;
+
+        if (event.deltaY < 0) {
+            input.value = Math.min(currentValue + step, parseFloat(input.max) || Infinity);
+        } else {
+            input.value = Math.max(currentValue - step, parseFloat(input.min) || -Infinity);
+        }
+        input.dispatchEvent(new Event('change'));
+    });
+});
   </script>
 </body>
 

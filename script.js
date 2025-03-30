@@ -37,10 +37,21 @@ function initGrid() {
 }
 
 function drawGrid() {
+    canvas.style.cursor = "crosshair";
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Draw preview point and line if exists
+    // Size adjuster for sidebars
+    const sidebarScale = 0.94; // Adjust this value to fine-tune the sidebars (e.g., 0.8 for smaller, 1.2 for larger)
+    
+    const redSideBar = document.querySelector(".red-side-bar");
+    const blueSideBar = document.querySelector(".blue-side-bar");
 
+    const canvasHeight = canvas.getBoundingClientRect().height; // Get the actual height of the canvas
+    const adjustedHeight = canvasHeight * sidebarScale; // Adjusted height based on scale
+    redSideBar.style.height = `${adjustedHeight}px`;
+    blueSideBar.style.height = `${adjustedHeight}px`;
+
+    // Draw preview point and line if exists
     // Function to check if a point is a lookAt point
     const isLookAtPoint = (index) => {
         if (index === 0) return false; // Starting point
@@ -60,7 +71,6 @@ function drawGrid() {
             ctx.lineTo(x, y);
             ctx.stroke();
         }
-
         // Draw preview point
         ctx.beginPath();
         ctx.fillStyle = "rgba(0, 191, 255, 0.5)";
@@ -97,7 +107,7 @@ function drawGrid() {
                 // Draw light purple line to lookAt point
                 ctx.stroke(); // End current red line
                 ctx.beginPath();
-                ctx.strokeStyle = "#e6b3ff"; // Light purple
+                ctx.strokeStyle = "rgb(200, 89, 255)"; // Light purple
                 let prevPoint = gridToCanvas(lastMovePoint.x, lastMovePoint.y);
                 ctx.moveTo(prevPoint.x, prevPoint.y);
                 ctx.lineTo(x, y);
@@ -121,9 +131,11 @@ function drawGrid() {
             if (index === 0) {
                 ctx.fillStyle = "green"; // Starting point
             } else if (point.type === "lookAt") {
-                ctx.fillStyle = "#e6b3ff"; // Light purple for lookAt points
+                ctx.fillStyle = "rgb(218, 145, 255)"; // Light purple for lookAt points
+            } else if (point.type === "reverse"){
+                ctx.fillStyle = "#ff8616"; // Reverse points (drive backwards to point)
             } else {
-                ctx.fillStyle = "red"; // Regular points
+                ctx.fillStyle = "#ff534e"; // Default points (drive forwards to point)
             }
             ctx.arc(x, y, 5, 0, Math.PI * 2);
             ctx.fill();
@@ -131,7 +143,7 @@ function drawGrid() {
     }
 }
 
-// Converts canvas coordinates to the new grid system
+// Converts canvas coordinates to the grid system
 function canvasToGrid(x, y) {
     return {
         x: Math.round((x / TILE_SIZE - 0.5) * 4) / 4,
@@ -197,8 +209,6 @@ function gridToCanvas(x, y) {
 
 function handleGridClick(e) {
     if (justDragged || document.getElementById("pathName").textContent === "No File") return;
-
-    // Close any open context menu
     if (contextMenu) {
         contextMenu.remove();
         contextMenu = null;
@@ -219,7 +229,7 @@ function addPoint(x, y) {
     points.push({ x, y });
     updatePointsList();
     drawGrid();
-    updateSimulationButton(); // Added to update button state
+    updateSimulationButton();
 
     const pathName = document.getElementById("pathName").textContent;
     addToRecentPaths(pathName, [...points]);
@@ -236,14 +246,45 @@ function updatePointsList() {
             (point, i) => `
     <div class="point-item" draggable="true" data-index="${i}">
       Point ${i}: (
-      <input type="number" min="-.5" max="5.5" step="0.25" value="${point.x}" onchange="updatePoint(${i}, 'x', this.value)">
+      <input 
+        style="border-radius: 8px;" 
+        type="number" 
+        min="-.5" 
+        max="5.5" 
+        step="0.25" 
+        value="${point.x}" 
+        onchange="updatePoint(${i}, 'x', this.value)">
       ,
-      <input type="number" min="-.5" max="5.5" step="0.25" value="${point.y}" onchange="updatePoint(${i}, 'y', this.value)">
+      <input 
+        style="border-radius: 8px;" 
+        type="number" 
+        min="-.5" 
+        max="5.5" 
+        step="0.25" 
+        value="${point.y}" 
+        onchange="updatePoint(${i}, 'y', this.value)">
       )
     </div>
   `
         )
         .join("");
+
+    // scrolling to change values
+    const inputs = list.querySelectorAll('input[type="number"]');
+    inputs.forEach((input) => {
+        input.addEventListener('wheel', (event) => {
+            event.preventDefault();
+            const step = parseFloat(input.step) || 1;
+            let currentValue = parseFloat(input.value) || 0;
+
+            if (event.deltaY < 0) {
+                input.value = Math.min(currentValue + step, parseFloat(input.max) || Infinity);
+            } else {
+                input.value = Math.max(currentValue - step, parseFloat(input.min) || -Infinity);
+            }
+            input.dispatchEvent(new Event('change'));
+        });
+    });
 }
 
 let startDragPos = null;
@@ -272,7 +313,6 @@ function handleMouseDown(e) {
 
         if (distance < 10) {
             draggedPointIndex = i;
-            canvas.style.cursor = "grabbing";
             return;
         }
     }
@@ -317,7 +357,7 @@ function showContextMenu(e) {
     let nearLine = false;
     let lineStartIndex = -1;
 
-    // Check if near a point (increased selection range to 20 pixels)
+    // Check if near a point
     for (let i = 0; i < points.length; i++) {
         const point = points[i];
         const canvasPoint = gridToCanvas(point.x, point.y);
@@ -339,13 +379,10 @@ function showContextMenu(e) {
             // Calculate perpendicular distance to line segment
             const lineLength = Math.sqrt(Math.pow(end.x - start.x, 2) + Math.pow(end.y - start.y, 2));
             if (lineLength === 0) continue;
-
             // Calculate perpendicular distance
             const perpendicularDist = Math.abs((end.x - start.x) * (start.y - y) - (start.x - x) * (end.y - start.y)) / lineLength;
-
             // Calculate projection point
             const dotProduct = ((x - start.x) * (end.x - start.x) + (y - start.y) * (end.y - start.y)) / (lineLength * lineLength);
-
             // Check if projection falls within line segment
             if (dotProduct >= 0 && dotProduct <= 1 && perpendicularDist < 10) {
                 nearLine = true;
@@ -361,6 +398,20 @@ function showContextMenu(e) {
     if (nearPoint) {
         menuItems.push(
             {
+                text: "Type: Normal",
+                action: () => {
+                    undoStack.push([...points]);
+                    redoStack = [];
+                    points.splice(pointIndex, 1);
+                    updatePointsList();
+                    drawGrid();
+                    updateSimulationButton();
+                    const pathName = document.getElementById("pathName").textContent;
+                    addToRecentPaths(pathName, [...points]);
+                },
+                style: "color:rgb(255, 213, 149);",
+            },
+            {
                 text: "Delete Point",
                 action: () => {
                     undoStack.push([...points]);
@@ -368,10 +419,11 @@ function showContextMenu(e) {
                     points.splice(pointIndex, 1);
                     updatePointsList();
                     drawGrid();
-                    updateSimulationButton(); // Added to update button state
+                    updateSimulationButton();
                     const pathName = document.getElementById("pathName").textContent;
                     addToRecentPaths(pathName, [...points]);
                 },
+                style: "color:rgb(255, 68, 68);",
             },
             {
                 text: "Delete Points After",
@@ -381,10 +433,11 @@ function showContextMenu(e) {
                     points.splice(pointIndex + 1);
                     updatePointsList();
                     drawGrid();
-                    updateSimulationButton(); // Added to update button state
+                    updateSimulationButton();
                     const pathName = document.getElementById("pathName").textContent;
                     addToRecentPaths(pathName, [...points]);
                 },
+                style: "color:rgb(255, 68, 68);",
             }
         );
     } else if (nearLine) {
@@ -397,7 +450,7 @@ function showContextMenu(e) {
                 points.splice(lineStartIndex + 1, 0, { x: gridPos.x, y: gridPos.y });
                 updatePointsList();
                 drawGrid();
-                updateSimulationButton(); // Added to update button state
+                updateSimulationButton();
             },
         });
     } else {
@@ -414,10 +467,12 @@ function showContextMenu(e) {
                     drawGrid();
                     updateSimulationButton();
                 },
+                style: "color:rgb(250, 96, 255);",
             },
             {
                 text: "Clear Path",
                 action: () => clearCurrentPath(),
+                style: "color:rgb(255, 122, 122);",
             },
             {
                 text: "Toggle Preview",
@@ -429,6 +484,7 @@ function showContextMenu(e) {
                         drawGrid();
                     }
                 },
+                style: "color:rgb(0, 138, 230);",
             },
             {
                 text: "Build Path",
@@ -449,7 +505,12 @@ function showContextMenu(e) {
             {
                 text: "Delete Path",
                 action: () => deleteSelectedPath(),
-                style: "color: #ff4444;",
+                style: "color:rgb(255, 68, 68);",
+            },
+            {
+                text: "Clear All Paths",
+                action: () => clearAllRecentPaths(),
+                style: "color:rgb(255, 68, 68);",
             }
         );
     }
@@ -470,7 +531,7 @@ function showContextMenu(e) {
       `;
         }
         menuItem.textContent = item.text;
-        menuItem.onmouseover = () => (menuItem.style.background = "#3498db");
+        menuItem.onmouseover = () => (menuItem.style.background = "#2c2c2c");
         menuItem.onmouseout = () => (menuItem.style.background = "transparent");
         menuItem.oncontextmenu = (e) => e.preventDefault();
         menuItem.onclick = () => {
@@ -536,12 +597,13 @@ function handleMouseUp(e) {
                 justDragged = false;
             }, 100);
         } else {
-            // If we just clicked (no drag), add a new point
-            const rect = canvas.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            let { x: gridX, y: gridY } = canvasToGrid(x, y);
-            addPoint(gridX, gridY);
+            // Causing issue where when i click on a point to create one ontop, it makes 2 instead of one
+            // // If we just clicked (no drag), add a new point
+            // const rect = canvas.getBoundingClientRect();
+            // const x = e.clientX - rect.left;
+            // const y = e.clientY - rect.top;
+            // let { x: gridX, y: gridY } = canvasToGrid(x, y);
+            // addPoint(gridX, gridY);
         }
     }
 
@@ -559,7 +621,7 @@ function updatePoint(index, coord, value) {
     redoStack = [];
     points[index][coord] = val;
     drawGrid();
-    updateSimulationButton(); // Added to update button state
+    updateSimulationButton();
     const pathName = document.getElementById("pathName").textContent;
     addToRecentPaths(pathName, [...points]);
 }
@@ -570,9 +632,9 @@ function undo() {
         points = undoStack.pop();
         updatePointsList();
         drawGrid();
-        updateSimulationButton(); // Added to update button state
+        updateSimulationButton();
         const pathName = document.getElementById("pathName").textContent;
-        addToRecentPaths(pathName, [...points]); // Save state after undo
+        addToRecentPaths(pathName, [...points]);
     }
 }
 
@@ -582,7 +644,7 @@ function redo() {
         points = redoStack.pop();
         updatePointsList();
         drawGrid();
-        updateSimulationButton(); // Added to update button state
+        updateSimulationButton();
     }
 }
 
@@ -599,7 +661,7 @@ function createNewPath() {
     redoStack = [];
     updatePointsList();
     drawGrid();
-    updateSimulationButton(); // Added to update button state
+    updateSimulationButton();
 
     const pathNameElement = document.getElementById("pathName");
     pathNameElement.textContent = newName;
@@ -620,7 +682,7 @@ function handleResize() {
 function changeTheme(theme) {
     document.documentElement.setAttribute("data-theme", theme);
     localStorage.setItem("theme", theme);
-    drawGrid(); // Redraw grid with new theme colors
+    drawGrid();
 }
 
 function updateRobotConfig() {
@@ -707,7 +769,7 @@ window.onload = function () {
     window.previewEnabled = localStorage.getItem("previewEnabled") !== "false";
     initGrid();
     updateRobotConfig();
-    updateSimulationButton(); // Initial update
+    updateSimulationButton();
 
     // Add hover effect for simulation button
     const simButton = document.getElementById("simButton");
@@ -756,7 +818,7 @@ window.onload = function () {
         points = [...recentPath.points];
         updatePointsList();
         drawGrid();
-        updateSimulationButton(); // Added to update button state
+        updateSimulationButton();
     } else {
         pathNameElement.textContent = "No File";
         pathNameElement.style.cursor = "default";
@@ -764,7 +826,7 @@ window.onload = function () {
         points = [];
         updatePointsList();
         drawGrid();
-        updateSimulationButton(); // Added to update button state
+        updateSimulationButton();
     }
     updateRecentPathsDropdown();
 };
@@ -790,7 +852,7 @@ function editPathName() {
         if (points.length > 0) {
             addToRecentPaths(newName, [...points]);
         }
-        updateSimulationButton(); // Added to update button state after name change
+        updateSimulationButton();
     };
 
     input.onkeydown = function (e) {
@@ -832,9 +894,9 @@ function updateRecentPathsDropdown() {
 
         const clearAllOption = document.createElement("option");
         clearAllOption.value = "CLEAR_ALL";
-        clearAllOption.textContent = "Clear All Recent Paths";
+        clearAllOption.textContent = "Clear All Paths";
         clearAllOption.style.color = "#ff4444";
-        clearAllOption.style.textAlign = "center";
+        // clearAllOption.style.textAlign = "center";
         dropdown.appendChild(clearAllOption);
     }
 }
@@ -863,6 +925,7 @@ function deleteSelectedPath() {
 
     popup.innerHTML = `
     <p style="margin-bottom: 20px;">Are you sure you want to delete the path "${selectedPath}"?</p>
+    <p style="margin-bottom: 20px;">THIS CAN'T BE UNDONE!!!!</p>
     <button onclick="confirmDeletePath('${selectedPath}')" style="margin-right: 10px;">Yes</button>
     <button onclick="closePopup()">No</button>
     <div style="margin-top: 10px; color: #999; font-size: 12px;">Press ESC to cancel</div>
@@ -891,7 +954,7 @@ function confirmDeletePath(pathName) {
         }
         updatePointsList();
         drawGrid();
-        updateSimulationButton(); // Added to update button state after deletion
+        updateSimulationButton();
     }
     updateRecentPathsDropdown();
     closePopup();
@@ -1022,7 +1085,7 @@ function importPath() {
             updatePointsList();
             drawGrid();
             addToRecentPaths(pathName, [...points]);
-            updateSimulationButton(); // Added to update button state after import
+            updateSimulationButton();
         };
         reader.readAsText(file);
     };
@@ -1720,6 +1783,7 @@ function clearAllRecentPaths() {
 
     popup.innerHTML = `
     <p style="margin-bottom: 20px;">Are you sure you want to clear all recent paths?</p>
+    <p style="margin-bottom: 20px;">THIS CAN'T BE UNDONE!!!!</p>
     <button onclick="confirmClearAll()" style="margin-right: 10px;">Yes</button>
     <button onclick="closePopup()">No</button>
     <div style="margin-top: 10px; color: #999; font-size: 12px;">Press ESC to cancel</div>
