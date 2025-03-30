@@ -69,6 +69,10 @@
       <div class="grid-container">
         <div class="grid-container-top-bars">
           <div class="top-bar">
+            <h1>Current Screen Size</h1>
+    <input type="text" id="screenSize" readonly>
+          </div>
+          <div class="top-bar">
             Path Type:
             <select id="pathTypeSelector" onchange="changePathType(this.value)">
               <option value="direct-path">Direct</option>
@@ -172,6 +176,15 @@ inputs.forEach((input) => {
         input.dispatchEvent(new Event('change'));
     });
 });
+
+
+ // Get screen width and height
+ const screenWidth = window.innerWidth;
+        const screenHeight = window.innerHeight;
+
+        // Display screen size in the text box
+        const textBox = document.getElementById("screenSize");
+        textBox.value = `Width: ${screenWidth}px, Height: ${screenHeight}px`;
   </script>
 </body>
 
