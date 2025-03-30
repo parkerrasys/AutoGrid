@@ -1,4 +1,4 @@
-@media (max-width: 1080px) {
+@media (max-width: 1366px) {
   ::-webkit-scrollbar {
       display: none;
     }
@@ -309,7 +309,7 @@
     canvas {
       background: var(--tile-color);
       border: 1px solid var(--border-color);
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 0 20px rgba(255, 18, 18, 0.2);
       width: auto;
       height: auto;
       cursor: grab;
