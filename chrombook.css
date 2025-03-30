@@ -363,6 +363,7 @@
       cursor: pointer;
       border-radius: 4px;
       font-size: 14px;
+      transform: scale(90%);
     }
 
     button:hover {
