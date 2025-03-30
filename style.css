@@ -2,6 +2,24 @@
   display: none;
 }
 
+@media (max-width: 1366px) {
+  /* Chromebook styles */
+  body {
+      font-size: 1px;
+  }
+  .container {
+      width: 50%;
+  }
+}
+
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 80%;
+}
+
 header {
   background: var(--bg-secondary);
   padding: 15px 20px;
@@ -115,12 +133,6 @@ body {
   background: var(--bg-secondary);
 }
 /* End Dropdown Menus */
-
-.container {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-}
 
 .project-title {
   font-size: 16px;
