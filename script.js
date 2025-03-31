@@ -93,19 +93,28 @@ function drawGrid() {
         for (let i = 1; i < points.length; i++) {
             let { x, y } = gridToCanvas(points[i].x, points[i].y);
             if (points[i].type === "lookAt") {
-                // Draw light purple line to lookAt point
-                ctx.stroke(); // End current red line
+                ctx.stroke();
                 ctx.beginPath();
-                ctx.strokeStyle = "rgb(200, 89, 255)"; // Light purple
+                ctx.strokeStyle = "rgb(200, 89, 255)";
                 let prevPoint = gridToCanvas(lastMovePoint.x, lastMovePoint.y);
                 ctx.moveTo(prevPoint.x, prevPoint.y);
                 ctx.lineTo(x, y);
                 ctx.stroke();
-
-                // Continue red line from last non-lookAt point
                 ctx.beginPath();
                 ctx.strokeStyle = "red";
                 ctx.moveTo(prevPoint.x, prevPoint.y);
+            } else if (points[i].type === "reverse") {
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.strokeStyle = "rgb(201, 97, 0)";
+                let prevPoint = gridToCanvas(lastMovePoint.x, lastMovePoint.y);
+                ctx.moveTo(prevPoint.x, prevPoint.y);
+                ctx.lineTo(x, y);
+                ctx.stroke();
+                lastMovePoint = points[i];
+                ctx.beginPath();
+                ctx.strokeStyle = "red";
+                ctx.moveTo(x, y);
             } else {
                 ctx.lineTo(x, y);
                 lastMovePoint = points[i];
@@ -375,196 +384,306 @@ function showContextMenu(e) {
         }
     }
 
-    // Check if near a line segment
-    if (!nearPoint && points.length > 1) {
-        for (let i = 0; i < points.length - 1; i++) {
-            const start = gridToCanvas(points[i].x, points[i].y);
-            const end = gridToCanvas(points[i + 1].x, points[i + 1].y);
+// Check if near a line segment
+if (!nearPoint && points.length > 1) {
+    for (let i = 0; i < points.length - 1; i++) {
+        const start = gridToCanvas(points[i].x, points[i].y);
+        const end = gridToCanvas(points[i + 1].x, points[i + 1].y);
 
-            // Calculate distance from point to line segment
-            // Calculate perpendicular distance to line segment
-            const lineLength = Math.sqrt(Math.pow(end.x - start.x, 2) + Math.pow(end.y - start.y, 2));
-            if (lineLength === 0) continue;
-            // Calculate perpendicular distance
-            const perpendicularDist = Math.abs((end.x - start.x) * (start.y - y) - (start.x - x) * (end.y - start.y)) / lineLength;
-            // Calculate projection point
-            const dotProduct = ((x - start.x) * (end.x - start.x) + (y - start.y) * (end.y - start.y)) / (lineLength * lineLength);
-            // Check if projection falls within line segment
-            if (dotProduct >= 0 && dotProduct <= 1 && perpendicularDist < 10) {
-                nearLine = true;
-                lineStartIndex = i;
-                break;
-            }
+        // Calculate distance from point to line segment
+        const lineLength = Math.sqrt(Math.pow(end.x - start.x, 2) + Math.pow(end.y - start.y, 2));
+        if (lineLength === 0) continue;
+        const perpendicularDist = Math.abs((end.x - start.x) * (start.y - y) - (start.x - x) * (end.y - start.y)) / lineLength;
+        const dotProduct = ((x - start.x) * (end.x - start.x) + (y - start.y) * (end.y - start.y)) / (lineLength * lineLength);
+        if (dotProduct >= 0 && dotProduct <= 1 && perpendicularDist < 10) {
+            nearLine = true;
+            lineStartIndex = i;
+            break;
         }
     }
+}
 
-    // Add menu items
-    const menuItems = [];
+// Add menu items
+const menuItems = [];
 
-    if (nearPoint) {
-        menuItems.push(
-            {
-                text: "Type: Normal",
-                action: () => {
+if (nearPoint) {
+    // Handle special case for starting point (first point in path)
+    const isStartingPoint = pointIndex === 0;
+    
+    // Only show point type options if it's NOT the starting point
+    if (!isStartingPoint) {
+        // Define point types with their styles
+        const pointTypes = [
+            { name: "Default", color: "rgb(255, 213, 149)", value: "normal" },
+            { name: "LookAt", color: "rgb(250, 96, 255)", value: "lookAt" },
+            { name: "Reverse", color: "rgb(255, 140, 0)", value: "reverse" }, // Dark Orange for Reverse
+        ];
 
-                },
-                style: "color:rgb(255, 213, 149);",
-            },
-            {
-                text: "Delete Point",
-                action: () => {
-                    undoStack.push([...points]);
-                    redoStack = [];
-                    points.splice(pointIndex, 1);
-                    updatePointsList();
-                    drawGrid();
-                    updateSimulationButton();
-                    const pathName = document.getElementById("pathName").textContent;
-                    addToRecentPaths(pathName, [...points]);
-                },
-                style: "color:rgb(255, 68, 68);",
-            },
-            {
-                text: "Delete Points Before",
-                action: () => {
-                    undoStack.push([...points]);
-                    redoStack = [];
-                    points.splice(pointIndex + 1);
-                    updatePointsList();
-                    drawGrid();
-                    updateSimulationButton();
-                    const pathName = document.getElementById("pathName").textContent;
-                    addToRecentPaths(pathName, [...points]);
-                },
-                style: "color:rgb(255, 68, 68);",
-            },
-            {
-                text: "Delete Points After",
-                action: () => {
-                    undoStack.push([...points]);
-                    redoStack = [];
-                    points.splice(pointIndex + 1);
-                    updatePointsList();
-                    drawGrid();
-                    updateSimulationButton();
-                    const pathName = document.getElementById("pathName").textContent;
-                    addToRecentPaths(pathName, [...points]);
-                },
-                style: "color:rgb(255, 68, 68);",
+        const displayPointType = points[pointIndex].type || "Default";
+        const pointColor = points[pointIndex].type === "lookAt" ? "rgb(250, 96, 255)" : 
+                          points[pointIndex].type === "reverse" ? "rgb(255, 140, 0)" : 
+                          "rgb(255, 213, 149)";
+
+        // Create point type submenu
+        const typeMenuItem = document.createElement("div");
+        typeMenuItem.style.cssText = `
+            padding: 5px 20px;
+            cursor: pointer;
+            color: ${pointColor};
+            position: relative;
+        `;
+        typeMenuItem.textContent = "Type: " + displayPointType;
+
+        // Create the submenu container
+        const typeSubmenu = document.createElement("div");
+        typeSubmenu.style.cssText = `
+            position: absolute;
+            left: 100%;
+            top: 0;
+            background-color: #1a1a1a;
+            border: 1px solid #444;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            display: none;
+            z-index: 1001;
+        `;
+
+        // Add type options to submenu
+        pointTypes.forEach(type => {
+            const typeOption = document.createElement("div");
+            typeOption.style.cssText = `
+                padding: 5px 20px;
+                cursor: pointer;
+                color: ${type.color};
+            `;
+            typeOption.textContent = type.name;
+            typeOption.onmouseover = () => (typeOption.style.background = "#2c2c2c");
+            typeOption.onmouseout = () => (typeOption.style.background = "transparent");
+            typeOption.onclick = (e) => {
+                e.stopPropagation();
+                e.preventDefault(); // Prevent default behavior
+                
+                undoStack.push([...points]);
+                redoStack = [];
+                points[pointIndex].type = type.value === "normal" ? undefined : type.value;
+                
+                // Update display text and color
+                typeMenuItem.textContent = "Type: " + type.name;
+                typeMenuItem.style.color = type.color;
+                
+                updatePointsList();
+                drawGrid();
+                const pathName = document.getElementById("pathName").textContent;
+                addToRecentPaths(pathName, [...points]);
+                
+                // Close the menu after making a selection
+                if (contextMenu) {
+                    contextMenu.remove();
+                    contextMenu = null;
+                }
+            };
+            typeSubmenu.appendChild(typeOption);
+        });
+
+        // Show submenu on hover
+        typeMenuItem.onmouseover = () => {
+            typeMenuItem.style.background = "#2c2c2c";
+            typeSubmenu.style.display = "block";
+        };
+        typeMenuItem.appendChild(typeSubmenu);
+
+        // Hide submenu when moving out of parent menu item and submenu
+        const hideSubmenu = () => {
+            if (typeSubmenu) typeSubmenu.style.display = "none";
+            if (typeMenuItem) typeMenuItem.style.background = "transparent";
+        };
+
+        typeMenuItem.onmouseout = (e) => {
+            // Prevent closing when hovering over the submenu
+            if (!typeSubmenu.contains(e.relatedTarget) && e.relatedTarget !== typeSubmenu) {
+                hideSubmenu();
             }
-        );
-    } else if (nearLine) {
-        const gridPos = canvasToGrid(x, y);
-        menuItems.push({
-            text: "Add Point Here",
+        };
+
+        typeSubmenu.onmouseout = (e) => {
+            // Check if we're moving out of the submenu completely
+            if (!typeSubmenu.contains(e.relatedTarget) && e.relatedTarget !== typeMenuItem) {
+                hideSubmenu();
+            }
+        };
+
+        contextMenu.appendChild(typeMenuItem);
+    }
+
+    // Display text for starting point
+    if (isStartingPoint) {
+        const startingPointInfo = document.createElement("div");
+        startingPointInfo.style.cssText = `
+            padding: 5px 20px;
+            color: rgb(0, 255, 0);
+            font-style: italic;
+        `;
+        startingPointInfo.textContent = "Starting Point (type cannot be changed)";
+        contextMenu.appendChild(startingPointInfo);
+    }
+
+    // Add other point-related menu items (Delete Point, etc.)
+    menuItems.push(
+        {
+            text: "Delete Point",
             action: () => {
                 undoStack.push([...points]);
                 redoStack = [];
-                points.splice(lineStartIndex + 1, 0, { x: gridPos.x, y: gridPos.y });
+                points.splice(pointIndex, 1);
+                updatePointsList();
+                drawGrid();
+                updateSimulationButton();
+                const pathName = document.getElementById("pathName").textContent;
+                addToRecentPaths(pathName, [...points]);
+            },
+            style: "color:rgb(255, 68, 68);",
+        },
+        {
+            text: "Delete Points Before",
+            action: () => {
+                undoStack.push([...points]);
+                redoStack = [];
+                points.splice(0, pointIndex);
+                updatePointsList();
+                drawGrid();
+                updateSimulationButton();
+                const pathName = document.getElementById("pathName").textContent;
+                addToRecentPaths(pathName, [...points]);
+            },
+            style: "color:rgb(255, 68, 68);",
+        },
+        {
+            text: "Delete Points After",
+            action: () => {
+                undoStack.push([...points]);
+                redoStack = [];
+                points.splice(pointIndex + 1);
+                updatePointsList();
+                drawGrid();
+                updateSimulationButton();
+                const pathName = document.getElementById("pathName").textContent;
+                addToRecentPaths(pathName, [...points]);
+            },
+            style: "color:rgb(255, 68, 68);",
+        }
+    );
+} else if (nearLine) {
+    const gridPos = canvasToGrid(x, y);
+    menuItems.push({
+        text: "Add Point Here",
+        action: () => {
+            undoStack.push([...points]);
+            redoStack = [];
+            points.splice(lineStartIndex + 1, 0, { x: gridPos.x, y: gridPos.y });
+            updatePointsList();
+            drawGrid();
+            updateSimulationButton();
+        },
+    });
+} else {
+    // Add general options when clicking elsewhere on the grid
+    const gridPos = canvasToGrid(x, y);
+    menuItems.push(
+        {
+            text: "Add lookAt Point",
+            action: () => {
+                undoStack.push([...points]);
+                redoStack = [];
+                points.push({ x: gridPos.x, y: gridPos.y, type: "lookAt" });
                 updatePointsList();
                 drawGrid();
                 updateSimulationButton();
             },
-        });
-    } else {
-        // Add general options when clicking elsewhere on the grid
-        const gridPos = canvasToGrid(x, y);
-        menuItems.push(
-            {
-                text: "Add lookAt Point",
-                action: () => {
-                    undoStack.push([...points]);
-                    redoStack = [];
-                    points.push({ x: gridPos.x, y: gridPos.y, type: "lookAt" });
-                    updatePointsList();
+            style: "color:rgb(250, 96, 255);",
+        },
+        {
+            text: "Clear Path",
+            action: () => clearCurrentPath(),
+            style: "color:rgb(255, 122, 122);",
+        },
+        {
+            text: "Toggle Preview",
+            action: () => {
+                window.previewEnabled = !window.previewEnabled;
+                localStorage.setItem("previewEnabled", window.previewEnabled);
+                if (!window.previewEnabled) {
+                    previewPoint = null;
                     drawGrid();
-                    updateSimulationButton();
-                },
-                style: "color:rgb(250, 96, 255);",
+                }
             },
-            {
-                text: "Clear Path",
-                action: () => clearCurrentPath(),
-                style: "color:rgb(255, 122, 122);",
-            },
-            {
-                text: "Toggle Preview",
-                action: () => {
-                    window.previewEnabled = !window.previewEnabled;
-                    localStorage.setItem("previewEnabled", window.previewEnabled);
-                    if (!window.previewEnabled) {
-                        previewPoint = null;
-                        drawGrid();
-                    }
-                },
-                style: "color:rgb(0, 138, 230);",
-            },
-            {
-                text: "Build Path",
-                action: () => buildPath(),
-            },
-            {
-                text: "Import Path",
-                action: () => importSharePath(),
-            },
-            {
-                text: "Export Path",
-                action: () => exportPath(),
-            },
-            {
-                text: "Share Path",
-                action: () => sharePaths(),
-            },
-            {
-                text: "Delete Path",
-                action: () => deleteSelectedPath(),
-                style: "color:rgb(255, 68, 68);",
-            },
-            {
-                text: "Clear All Paths",
-                action: () => clearAllRecentPaths(),
-                style: "color:rgb(255, 68, 68);",
-            }
-        );
+            style: "color:rgb(0, 138, 230);",
+        },
+        {
+            text: "Build Path",
+            action: () => buildPath(),
+        },
+        {
+            text: "Import Path",
+            action: () => importSharePath(),
+        },
+        {
+            text: "Export Path",
+            action: () => exportPath(),
+        },
+        {
+            text: "Share Path",
+            action: () => sharePaths(),
+        },
+        {
+            text: "Delete Path",
+            action: () => deleteSelectedPath(),
+            style: "color:rgb(255, 68, 68);",
+        },
+        {
+            text: "Clear All Paths",
+            action: () => clearAllRecentPaths(),
+            style: "color:rgb(255, 68, 68);",
+        }
+    );
+}
+
+menuItems.forEach((item) => {
+    const menuItem = document.createElement("div");
+    if (item.style) {
+        menuItem.style.cssText = `
+            padding: 5px 20px;
+            cursor: pointer;
+            ${item.style}
+        `;
+    } else {
+        menuItem.style.cssText = `
+            padding: 5px 20px;
+            cursor: pointer;
+            color: white;
+        `;
     }
+    menuItem.textContent = item.text;
+    menuItem.onmouseover = () => (menuItem.style.background = "#2c2c2c");
+    menuItem.onmouseout = () => (menuItem.style.background = "transparent");
+    menuItem.oncontextmenu = (e) => e.preventDefault();
+    menuItem.onclick = () => {
+        item.action();
+        contextMenu.remove();
+        contextMenu = null;
+    };
+    contextMenu.appendChild(menuItem);
+});
 
-    menuItems.forEach((item) => {
-        const menuItem = document.createElement("div");
-        if (item.style) {
-            menuItem.style.cssText = `
-        padding: 5px 20px;
-        cursor: pointer;
-        ${item.style}
-      `;
-        } else {
-            menuItem.style.cssText = `
-        padding: 5px 20px;
-        cursor: pointer;
-        color: white;
-      `;
-        }
-        menuItem.textContent = item.text;
-        menuItem.onmouseover = () => (menuItem.style.background = "#2c2c2c");
-        menuItem.onmouseout = () => (menuItem.style.background = "transparent");
-        menuItem.oncontextmenu = (e) => e.preventDefault();
-        menuItem.onclick = () => {
-            item.action();
-            contextMenu.remove();
-            contextMenu = null;
-        };
-        contextMenu.appendChild(menuItem);
-    });
+document.body.appendChild(contextMenu);
 
-    document.body.appendChild(contextMenu);
-
-    // Keep menu open until explicitly closed
-    document.addEventListener("click", function closeMenu(e) {
-        if (contextMenu && !contextMenu.contains(e.target) && e.button !== 2) {
-            contextMenu.remove();
-            contextMenu = null;
-            document.removeEventListener("click", closeMenu);
-        }
-    });
+// Keep menu open until explicitly closed
+document.addEventListener("click", function closeMenu(e) {
+    if (contextMenu && !contextMenu.contains(e.target) && e.button !== 2) {
+        contextMenu.remove();
+        contextMenu = null;
+        document.removeEventListener("click", closeMenu);
+    }
+});
 }
 
 function handleMouseMove(e) {
@@ -1145,6 +1264,8 @@ function buildPath() {
             return `  setStarting(${p.x}, ${p.y});`;
         } else if (p.type === "lookAt") {
             return `  lookAt(${p.x}, ${p.y});`;
+        } else if (p.type === "reverse") {
+            return `  reverseTo(${p.x}, ${p.y});`;
         } else {
             return `  moveTo(${p.x}, ${p.y});`;
         }
@@ -1264,7 +1385,7 @@ function confirmClear() {
     drawGrid();
     addToRecentPaths(currentName, []);
     updateRecentPathsDropdown();
-    updateSimulationButton(); // Update button after clearing
+    updateSimulationButton();
     closePopup();
 }
 
@@ -1277,7 +1398,18 @@ function generateShareCode() {
     return recentPaths
         .map((path) => {
             const encodedName = encodeURIComponent(path.name);
-            const encodedPoints = path.points.map((p) => `${p.x},${p.y}${p.type === "lookAt" ? ",l" : ""}`).join("|");
+            const encodedPoints = path.points
+                .map((p) => {
+                    // Check for each point type and encode accordingly
+                    let pointStr = `${p.x},${p.y}`;
+                    if (p.type === "lookAt") {
+                        pointStr += ",l"; // "l" for lookAt
+                    } else if (p.type === "reverse") {
+                        pointStr += ",r"; // "r" for reverse
+                    }
+                    return pointStr;
+                })
+                .join("|");
             return `${encodedName}:${encodedPoints}`;
         })
         .join(";");
@@ -1292,7 +1424,7 @@ function parsePaths(shareCode) {
                 return {
                     x: parseFloat(x),
                     y: parseFloat(y),
-                    type: type === "l" ? "lookAt" : undefined,
+                    type: type === "l" ? "lookAt" : (type === "r" ? "reverse" : undefined),
                 };
             });
             return {
@@ -1304,6 +1436,7 @@ function parsePaths(shareCode) {
         throw new Error("Invalid share code format");
     }
 }
+
 
 function handleImport() {
     const fileInput = document.getElementById("importFile");
