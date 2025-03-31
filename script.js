@@ -40,17 +40,6 @@ function drawGrid() {
     canvas.style.cursor = "crosshair";
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Size adjuster for sidebars
-    const sidebarScale = 0.94; // Adjust this value to fine-tune the sidebars (e.g., 0.8 for smaller, 1.2 for larger)
-    
-    const redSideBar = document.querySelector(".red-side-bar");
-    const blueSideBar = document.querySelector(".blue-side-bar");
-
-    const canvasHeight = canvas.getBoundingClientRect().height; // Get the actual height of the canvas
-    const adjustedHeight = canvasHeight * sidebarScale; // Adjusted height based on scale
-    redSideBar.style.height = `${adjustedHeight}px`;
-    blueSideBar.style.height = `${adjustedHeight}px`;
-
     // Draw preview point and line if exists
     // Function to check if a point is a lookAt point
     const isLookAtPoint = (index) => {
@@ -248,7 +237,7 @@ function updatePointsList() {
       Point ${i}: (
       <input 
         style="border-radius: 8px;" 
-        type="number" 
+        type="horizontal-number" 
         min="-.5" 
         max="5.5" 
         step="0.25" 
@@ -257,7 +246,7 @@ function updatePointsList() {
       ,
       <input 
         style="border-radius: 8px;" 
-        type="number" 
+        type="vertical-number" 
         min="-.5" 
         max="5.5" 
         step="0.25" 
@@ -270,8 +259,25 @@ function updatePointsList() {
         .join("");
 
     // scrolling to change values
-    const inputs = list.querySelectorAll('input[type="number"]');
-    inputs.forEach((input) => {
+    const vertical_inputs = list.querySelectorAll('input[type="vertical-number"]');
+    vertical_inputs.forEach((input) => {
+        input.addEventListener('wheel', (event) => {
+            event.preventDefault();
+            const step = parseFloat(input.step) || 1;
+            let currentValue = parseFloat(input.value) || 0;
+
+            if (event.deltaY < 0) {
+                input.value = Math.min(currentValue + step, parseFloat(input.max) || Infinity);
+            } else {
+                input.value = Math.max(currentValue - step, parseFloat(input.min) || -Infinity);
+            }
+            input.dispatchEvent(new Event('change'));
+        });
+    });
+
+        // scrolling to change values
+    const horizontal_inputs = list.querySelectorAll('input[type="horizontal-number"]');
+    horizontal_inputs.forEach((input) => {
         input.addEventListener('wheel', (event) => {
             event.preventDefault();
             const step = parseFloat(input.step) || 1;
@@ -400,14 +406,7 @@ function showContextMenu(e) {
             {
                 text: "Type: Normal",
                 action: () => {
-                    undoStack.push([...points]);
-                    redoStack = [];
-                    points.splice(pointIndex, 1);
-                    updatePointsList();
-                    drawGrid();
-                    updateSimulationButton();
-                    const pathName = document.getElementById("pathName").textContent;
-                    addToRecentPaths(pathName, [...points]);
+
                 },
                 style: "color:rgb(255, 213, 149);",
             },
@@ -417,6 +416,20 @@ function showContextMenu(e) {
                     undoStack.push([...points]);
                     redoStack = [];
                     points.splice(pointIndex, 1);
+                    updatePointsList();
+                    drawGrid();
+                    updateSimulationButton();
+                    const pathName = document.getElementById("pathName").textContent;
+                    addToRecentPaths(pathName, [...points]);
+                },
+                style: "color:rgb(255, 68, 68);",
+            },
+            {
+                text: "Delete Points Before",
+                action: () => {
+                    undoStack.push([...points]);
+                    redoStack = [];
+                    points.splice(pointIndex + 1);
                     updatePointsList();
                     drawGrid();
                     updateSimulationButton();
@@ -1053,18 +1066,24 @@ function importPath() {
     input.type = "file";
     input.onchange = (e) => {
         const file = e.target.files[0];
-        const pathName = file.name.replace(/\.[^/.]+$/, "");
-        document.getElementById("pathName").textContent = pathName;
+        const baseName = file.name.replace(/\.[^/.]+$/, "");
         const reader = new FileReader();
+        
         reader.onload = (event) => {
             const text = event.target.result;
-            let baseName = pathName;
+            
+            // Apply the same naming logic as in handleImport
+            let newName = baseName;
             let counter = 1;
-            while (recentPaths.some((p) => p.name === pathName)) {
-                pathName = `${baseName} (${counter})`;
+            while (recentPaths.some((p) => p.name === newName)) {
+                newName = `${baseName} (${counter})`;
                 counter++;
             }
-            document.getElementById("pathName").textContent = pathName;
+            
+            document.getElementById("pathName").textContent = newName;
+            document.getElementById("pathName").style.cursor = "pointer";
+            document.getElementById("pathName").onclick = editPathName;
+            
             points = text
                 .split("\n")
                 .map((line) => {
@@ -1082,13 +1101,16 @@ function importPath() {
                     return null;
                 })
                 .filter((p) => p !== null);
+                
             updatePointsList();
             drawGrid();
-            addToRecentPaths(pathName, [...points]);
+            addToRecentPaths(newName, [...points]);
             updateSimulationButton();
         };
+        
         reader.readAsText(file);
     };
+    
     input.click();
 }
 

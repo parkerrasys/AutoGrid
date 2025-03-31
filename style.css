@@ -55,6 +55,21 @@ header img {
   transition: background 0.2s;
 }
 
+.bug-tag:hover {
+  background: #247000;
+}
+
+.bug-tag {
+  background: #005c0c;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  color: #ccc;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
 .version-tag:hover,
 .doc-tag:hover,
 .github-link:hover {
@@ -315,6 +330,11 @@ canvas {
   cursor: grab;
 }
 
+.sidebar-organizer {
+  display: flex;
+  gap: 10px;
+}
+
 .red-side-bar {
   display: flex;
   justify-content: center;
@@ -483,3 +503,102 @@ input[type="number"] {
   }
 }
 
+input[type="horizontal-number"] {
+  border-radius: 8px;
+  text-align: center;
+  border: 1px solid #ccc;
+  cursor: ew-resize;
+
+  -moz-appearance: textfield;
+  -webkit-appearance: none;
+  appearance: none;
+
+  &::-webkit-inner-spin-button, 
+  &::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  &:hover::-webkit-inner-spin-button, 
+  &:hover::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+  }
+}
+
+input[type="vertical-number"] {
+  border-radius: 8px;
+  text-align: center;
+  border: 1px solid #ccc;
+  cursor: ns-resize;
+
+  -moz-appearance: textfield;
+  -webkit-appearance: none;
+  appearance: none;
+
+  &::-webkit-inner-spin-button, 
+  &::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  &:hover::-webkit-inner-spin-button, 
+  &:hover::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+  }
+}
+
+
+
+
+
+
+
+
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle; /* Aligns with other inline elements */
+}
+
+/* Button within dropdown */
+.link-dropdown {
+  background: #3c3c3c;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  color: #ccc;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s;
+  position: relative;
+  display: inline-block;
+  border: none;
+  outline: none;
+  margin: 0; /* Remove any default margins */
+}
+
+/* Dropdown content (hidden by default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  top: 100%;
+  left: 0;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+  display: block;
+}

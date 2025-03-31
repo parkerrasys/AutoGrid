@@ -170,9 +170,9 @@
 
 /* Dev's Preference - Red/black */
 [data-theme="devpref"] {
-  --bg-primary: #0a0a0a;
-  --bg-secondary: #1a1a1a;
-  --bg-tertiary: #2a2a2a;
+  --bg-primary: #0e0202;
+  --bg-secondary: #1d1616;
+  --bg-tertiary: rgb(24, 13, 13);
   --text-primary: #ffffff;
   --text-secondary: #cccccc;
   --accent-color: #ff1e1e;
@@ -180,9 +180,9 @@
   --danger-color: #ff4444;
   --danger-hover: #cc0000;
   --border-color: #ff3d3d;
-  --grid-color: #151515;
-  --tile-color: #0f0f0f;
-  --pointlist-bg: #1f1f1f;
+  --grid-color: #0a0505;
+  --tile-color: #0c0606;
+  --pointlist-bg: #160808;
 }
 
 [data-theme="devpref"] button {
