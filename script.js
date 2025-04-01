@@ -1632,7 +1632,7 @@ function simulatePath() {
     bottom: 0;
     z-index: 100;
     cursor: not-allowed;
-  `;
+    `;
     header.style.position = "relative";
     header.appendChild(headerOverlay);
 
@@ -1647,7 +1647,7 @@ function simulatePath() {
     bottom: 0;
     z-index: 100;
     cursor: not-allowed;
-  `;
+    `;
     leftSidebar.style.position = "relative";
     leftSidebar.appendChild(leftOverlay);
 
@@ -1662,7 +1662,7 @@ function simulatePath() {
     bottom: 0;
     z-index: 100;
     cursor: not-allowed;
-  `;
+    `;
 
     const tooltip = document.createElement("div");
     tooltip.className = "simulation-tooltip";
@@ -1675,7 +1675,7 @@ function simulatePath() {
     border-radius: 4px;
     pointer-events: none;
     z-index: 101;
-  `;
+    `;
     tooltip.textContent = "Stop the simulation to edit";
 
     document.addEventListener("mousemove", (e) => {
@@ -1700,7 +1700,7 @@ function simulatePath() {
     bottom: 0;
     z-index: 100;
     cursor: not-allowed;
-  `;
+    `;
     mainElement.appendChild(mainOverlay);
 
     gridContainer.style.position = "relative";
@@ -1720,9 +1720,12 @@ function simulatePath() {
     let robotAngle = 0;
     let targetAngle = 0;
     let isRotating = true;
+    let isReversing = false; // Flag to track if robot is in reverse mode
     let progress = 0;
     let animationFrameId = null;
     let lastTime = performance.now();
+    let currentReverseTarget = null; // Keep track of the current reverse target
+    let movementAngle = 0; // Store the angle we're actually moving at
 
     function calculateAngle(fromX, fromY, toX, toY) {
         const dx = toX - fromX;
@@ -1753,22 +1756,40 @@ function simulatePath() {
         ctx.fillRect(-robotWidthPx / 2, -robotLengthPx / 2, robotWidthPx, robotLengthPx);
         ctx.strokeRect(-robotWidthPx / 2, -robotLengthPx / 2, robotWidthPx, robotLengthPx);
 
-        // Draw direction indicator
+        // Draw direction indicator - red if reversing, normal otherwise
         ctx.beginPath();
         ctx.moveTo(0, 0);
-        ctx.lineTo(0, -robotLengthPx / 4);
-        ctx.strokeStyle = "#e74c3c";
-        ctx.lineWidth = 2;
-        ctx.stroke();
+        if (isReversing) {
+            // Draw indicator pointing to the back when reversing
+            ctx.lineTo(0, robotLengthPx / 4);
+            ctx.strokeStyle = "#e74c3c";
+            ctx.lineWidth = 2;
+            ctx.stroke();
 
-        // Draw arrow head
-        ctx.beginPath();
-        ctx.moveTo(-5, -robotLengthPx / 4 + 10);
-        ctx.lineTo(0, -robotLengthPx / 4);
-        ctx.lineTo(5, -robotLengthPx / 4 + 10);
-        ctx.closePath();
-        ctx.fillStyle = "#e74c3c";
-        ctx.fill();
+            // Draw arrow head for reversing
+            ctx.beginPath();
+            ctx.moveTo(-5, robotLengthPx / 4 - 10);
+            ctx.lineTo(0, robotLengthPx / 4);
+            ctx.lineTo(5, robotLengthPx / 4 - 10);
+            ctx.closePath();
+            ctx.fillStyle = "#e74c3c";
+            ctx.fill();
+        } else {
+            // Standard forward indicator
+            ctx.lineTo(0, -robotLengthPx / 4);
+            ctx.strokeStyle = "#e74c3c";
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Draw arrow head
+            ctx.beginPath();
+            ctx.moveTo(-5, -robotLengthPx / 4 + 10);
+            ctx.lineTo(0, -robotLengthPx / 4);
+            ctx.lineTo(5, -robotLengthPx / 4 + 10);
+            ctx.closePath();
+            ctx.fillStyle = "#e74c3c";
+            ctx.fill();
+        }
 
         ctx.restore();
     }
@@ -1781,30 +1802,21 @@ function simulatePath() {
             currentSimulation = requestAnimationFrame(animate);
             return;
         }
+        
         const deltaTime = (currentTime - lastTime) / 1000;
         lastTime = currentTime;
-
-        // Find next moveTo point
-        let nextMovePoint = null;
-        let lookAheadIndex = currentPoint + 1;
-
-        while (lookAheadIndex < points.length && !nextMovePoint) {
-            if (!points[lookAheadIndex].type) {
-                nextMovePoint = points[lookAheadIndex];
-            }
-            lookAheadIndex++;
-        }
 
         const endPoint = points[currentPoint + 1];
         const startPoint = points[currentPoint];
 
+        // Handle lookAt points
         if (endPoint.type === "lookAt") {
             if (isRotating) {
                 // Find last moveTo point
                 let lastMovePoint = [...points]
                     .slice(0, currentPoint + 1)
                     .reverse()
-                    .find((p) => !p.type);
+                    .find((p) => !p.type || p.type === "reverse");
 
                 // Stay at last moveTo point while rotating
                 robotX = lastMovePoint.x;
@@ -1824,7 +1836,7 @@ function simulatePath() {
                 } else {
                     robotAngle = targetAngle;
                     isRotating = false;
-                    // Wait for 1 second before proceeding to next point
+                    // Wait before proceeding to next point
                     const lookAtPauseDuration = parseFloat(document.getElementById("lookAtPause").value) * 1000;
                     setTimeout(() => {
                         currentPoint++;
@@ -1838,14 +1850,84 @@ function simulatePath() {
             return;
         }
 
-        if (isRotating) {
-            // Find next non-lookAt point for movement
-            let nextMovePoint = endPoint;
-            let lookAheadIndex = currentPoint + 1;
-            while (nextMovePoint.type === "lookAt" && lookAheadIndex < points.length - 1) {
-                lookAheadIndex++;
-                nextMovePoint = points[lookAheadIndex];
+        // Handle reverse points
+        if (endPoint.type === "reverse") {
+            // Store the current reverse target if we haven't done so already
+            if (!currentReverseTarget) {
+                currentReverseTarget = endPoint;
             }
+            
+            if (isRotating) {
+                // For reverse points, we need to rotate the robot to face AWAY from the point
+                // Calculate angle in the opposite direction
+                const directAngle = calculateAngle(robotX, robotY, endPoint.x, endPoint.y);
+                // Add 180 degrees to make it face in the opposite direction
+                targetAngle = (directAngle + 180) % 360;
+                if (targetAngle > 180) targetAngle -= 360;
+                
+                let angleDiff = targetAngle - robotAngle;
+                while (angleDiff > 180) angleDiff -= 360;
+                while (angleDiff < -180) angleDiff += 360;
+
+                const rotationStep = turnSpeed * deltaTime;
+
+                if (Math.abs(angleDiff) > rotationStep) {
+                    robotAngle += Math.sign(angleDiff) * rotationStep;
+                } else {
+                    robotAngle = targetAngle;
+                    isRotating = false;
+                    isReversing = true; // Set reversing mode as we start moving backwards
+                    // Remember the movement angle for the entire movement
+                    movementAngle = robotAngle;
+                }
+            } else {
+                // Moving backwards to reverse point
+                const lastMovePoint = [...points]
+                    .slice(0, currentPoint + 1)
+                    .reverse()
+                    .find((p) => !p.type || p.type === "reverse");
+                    
+                const dx = endPoint.x - lastMovePoint.x;
+                const dy = endPoint.y - lastMovePoint.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                // Adjust progress based on actual distance
+                progress += (moveSpeed * deltaTime) / (distance || 1);
+
+                if (progress >= 1) {
+                    // When we reach the reverse point, it becomes our new position
+                    robotX = endPoint.x;
+                    robotY = endPoint.y;
+                    progress = 0;
+                    currentPoint++;
+                    isRotating = true;
+                    // Clear the current reverse target since we've finished with it
+                    currentReverseTarget = null;
+                } else {
+                    robotX = lastMovePoint.x + dx * progress;
+                    robotY = lastMovePoint.y + dy * progress;
+                    // Keep using the same angle during movement - no change
+                    robotAngle = movementAngle;
+                }
+            }
+            
+            drawGrid();
+            drawRobot(robotX, robotY, robotAngle);
+            currentSimulation = requestAnimationFrame(animate);
+            return;
+        }
+
+        // Standard rotation for normal movement
+        if (isRotating) {
+            // If we were in reverse mode and now moving to a normal point,
+            // we should exit reverse mode
+            if (isReversing) {
+                isReversing = false;
+                currentReverseTarget = null;
+            }
+
+            // Find next point for movement
+            let nextMovePoint = endPoint;
 
             targetAngle = calculateAngle(robotX, robotY, nextMovePoint.x, nextMovePoint.y);
             let angleDiff = targetAngle - robotAngle;
@@ -1860,23 +1942,28 @@ function simulatePath() {
             } else {
                 robotAngle = targetAngle;
                 isRotating = false;
+                // Remember the movement angle for the entire movement
+                movementAngle = robotAngle;
             }
         } else {
-            if (nextMovePoint) {
+            // Normal movement to the next point
+            if (endPoint) {
+                // Get the last actual position point (moveTo or reverse)
                 const lastMovePoint = [...points]
                     .slice(0, currentPoint + 1)
                     .reverse()
-                    .find((p) => !p.type);
-                const dx = nextMovePoint.x - lastMovePoint.x;
-                const dy = nextMovePoint.y - lastMovePoint.y;
+                    .find((p) => !p.type || p.type === "reverse");
+                    
+                const dx = endPoint.x - lastMovePoint.x;
+                const dy = endPoint.y - lastMovePoint.y;
                 const distance = Math.sqrt(dx * dx + dy * dy);
 
                 // Adjust progress based on actual distance
                 progress += (moveSpeed * deltaTime) / (distance || 1);
 
                 if (progress >= 1) {
-                    robotX = nextMovePoint.x;
-                    robotY = nextMovePoint.y;
+                    robotX = endPoint.x;
+                    robotY = endPoint.y;
                     progress = 0;
                     currentPoint++;
                     if (currentPoint < points.length - 1) {
@@ -1885,6 +1972,8 @@ function simulatePath() {
                 } else {
                     robotX = lastMovePoint.x + dx * progress;
                     robotY = lastMovePoint.y + dy * progress;
+                    // Keep using the same angle during movement - no change
+                    robotAngle = movementAngle;
                 }
             } else {
                 currentPoint++;
@@ -1903,6 +1992,8 @@ function simulatePath() {
                 robotY = points[0].y;
                 robotAngle = 0;
                 isRotating = true;
+                isReversing = false;
+                currentReverseTarget = null;
                 progress = 0;
                 currentSimulation = requestAnimationFrame(animate);
             } else {
