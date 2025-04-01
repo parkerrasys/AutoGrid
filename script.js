@@ -222,7 +222,7 @@ function handleGridClick(e) {
 }
 
 function addPoint(x, y) {
-    undoStack.push([...points]);
+    undoStack.push(JSON.parse(JSON.stringify(points)));
     redoStack = [];
     points.push({ x, y });
     updatePointsList();
@@ -236,6 +236,8 @@ function addPoint(x, y) {
 let isDragging = false;
 let draggedPointIndex = null;
 let justDragged = false;
+let startDragPos = null;
+let originalPoints = null; // Store original points when starting a drag
 
 function updatePointsList() {
     const list = document.getElementById("pointsList");
@@ -284,7 +286,7 @@ function updatePointsList() {
         });
     });
 
-        // scrolling to change values
+    // scrolling to change values
     const horizontal_inputs = list.querySelectorAll('input[type="horizontal-number"]');
     horizontal_inputs.forEach((input) => {
         input.addEventListener('wheel', (event) => {
@@ -302,8 +304,6 @@ function updatePointsList() {
     });
 }
 
-let startDragPos = null;
-
 let contextMenu = null;
 
 function handleMouseDown(e) {
@@ -320,14 +320,16 @@ function handleMouseDown(e) {
 
     startDragPos = { x, y };
 
-    // Check if clicked near any point
-    for (let i = 0; i < points.length; i++) {
+    // Check if clicked near any point - loop backward to find newest points first
+    for (let i = points.length - 1; i >= 0; i--) {
         const point = points[i];
         const canvasPoint = gridToCanvas(point.x, point.y);
         const distance = Math.sqrt(Math.pow(x - canvasPoint.x, 2) + Math.pow(y - canvasPoint.y, 2));
 
-        if (distance < 10) {
+        if (distance < 20) {
             draggedPointIndex = i;
+            // Store a deep copy of the points array when starting to drag
+            originalPoints = JSON.parse(JSON.stringify(points));
             return;
         }
     }
@@ -463,7 +465,7 @@ if (nearPoint) {
                 e.stopPropagation();
                 e.preventDefault(); // Prevent default behavior
                 
-                undoStack.push([...points]);
+                undoStack.push(JSON.parse(JSON.stringify(points)));
                 redoStack = [];
                 points[pointIndex].type = type.value === "normal" ? undefined : type.value;
                 
@@ -523,7 +525,7 @@ if (nearPoint) {
             color: rgb(0, 255, 0);
             font-style: italic;
         `;
-        startingPointInfo.textContent = "Starting Point (type cannot be changed)";
+        startingPointInfo.textContent = "Starting Point";
         contextMenu.appendChild(startingPointInfo);
     }
 
@@ -532,7 +534,7 @@ if (nearPoint) {
         {
             text: "Delete Point",
             action: () => {
-                undoStack.push([...points]);
+                undoStack.push(JSON.parse(JSON.stringify(points)));
                 redoStack = [];
                 points.splice(pointIndex, 1);
                 updatePointsList();
@@ -546,7 +548,7 @@ if (nearPoint) {
         {
             text: "Delete Points Before",
             action: () => {
-                undoStack.push([...points]);
+                undoStack.push(JSON.parse(JSON.stringify(points)));
                 redoStack = [];
                 points.splice(0, pointIndex);
                 updatePointsList();
@@ -560,7 +562,7 @@ if (nearPoint) {
         {
             text: "Delete Points After",
             action: () => {
-                undoStack.push([...points]);
+                undoStack.push(JSON.parse(JSON.stringify(points)));
                 redoStack = [];
                 points.splice(pointIndex + 1);
                 updatePointsList();
@@ -577,7 +579,7 @@ if (nearPoint) {
     menuItems.push({
         text: "Add Point Here",
         action: () => {
-            undoStack.push([...points]);
+            undoStack.push(JSON.parse(JSON.stringify(points)));
             redoStack = [];
             points.splice(lineStartIndex + 1, 0, { x: gridPos.x, y: gridPos.y });
             updatePointsList();
@@ -592,7 +594,7 @@ if (nearPoint) {
         {
             text: "Add lookAt Point",
             action: () => {
-                undoStack.push([...points]);
+                undoStack.push(JSON.parse(JSON.stringify(points)));
                 redoStack = [];
                 points.push({ x: gridPos.x, y: gridPos.y, type: "lookAt" });
                 updatePointsList();
@@ -687,7 +689,7 @@ document.addEventListener("click", function closeMenu(e) {
 }
 
 function handleMouseMove(e) {
-    if (!draggedPointIndex !== null) {
+    if (draggedPointIndex !== null) {
         const rect = canvas.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
@@ -697,6 +699,7 @@ function handleMouseMove(e) {
             const distance = Math.sqrt(Math.pow(x - startDragPos.x, 2) + Math.pow(y - startDragPos.y, 2));
             if (distance > 5) {
                 isDragging = true;
+                canvas.style.cursor = "grab";
             }
         }
     }
@@ -719,29 +722,28 @@ function handleMouseMove(e) {
 function handleMouseUp(e) {
     if (draggedPointIndex !== null) {
         if (isDragging) {
-            // If we dragged, save the state
-            undoStack.push([...points.map((p) => ({ ...p }))]);
-            redoStack = [];
+            // If we dragged, save the state to undo stack
+            // Only save if there was an actual change
+            if (originalPoints && JSON.stringify(originalPoints) !== JSON.stringify(points)) {
+                undoStack.push(originalPoints);
+                redoStack = [];
+                
+                // Save the updated path
+                const pathName = document.getElementById("pathName").textContent;
+                addToRecentPaths(pathName, JSON.parse(JSON.stringify(points))); // Save after drag
+            }
+            
             justDragged = true;
-            const pathName = document.getElementById("pathName").textContent;
-            addToRecentPaths(pathName, [...points]); // Save after drag
             setTimeout(() => {
                 justDragged = false;
             }, 100);
-        } else {
-            // Causing issue where when i click on a point to create one ontop, it makes 2 instead of one
-            // // If we just clicked (no drag), add a new point
-            // const rect = canvas.getBoundingClientRect();
-            // const x = e.clientX - rect.left;
-            // const y = e.clientY - rect.top;
-            // let { x: gridX, y: gridY } = canvasToGrid(x, y);
-            // addPoint(gridX, gridY);
         }
     }
 
     isDragging = false;
     draggedPointIndex = null;
     startDragPos = null;
+    originalPoints = null;
     canvas.style.cursor = "default";
 }
 
@@ -777,6 +779,8 @@ function redo() {
         updatePointsList();
         drawGrid();
         updateSimulationButton();
+        const pathName = document.getElementById("pathName").textContent;
+        addToRecentPaths(pathName, [...points]);
     }
 }
 
@@ -939,6 +943,9 @@ window.onload = function () {
         if (e.ctrlKey && e.key === "z") {
             e.preventDefault();
             undo();
+        } else if (e.ctrlKey && e.key === "x") {
+            e.preventDefault();
+            redo();
         }
     });
     const pathNameElement = document.getElementById("pathName");
