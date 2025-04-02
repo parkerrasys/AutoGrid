@@ -125,6 +125,18 @@ function drawGrid() {
         // Draw points
         points.forEach((point, index) => {
             let { x, y } = gridToCanvas(point.x, point.y);
+            
+            // Check if this point is selected - draw gold outline
+            if (window.selectedPoints && window.selectedPoints.has(index)) {
+                ctx.beginPath();
+                ctx.strokeStyle = "#FFD700"; // Gold color
+                ctx.lineWidth = 3;
+                ctx.arc(x, y, 8, 0, Math.PI * 2);
+                ctx.stroke();
+                ctx.lineWidth = 1; // Reset line width
+            }
+            
+            // Draw the point fill
             ctx.beginPath();
             if (index === 0) {
                 ctx.fillStyle = "green"; // Starting point
@@ -269,6 +281,115 @@ function updatePointsList() {
         )
         .join("");
 
+    // Add selected class style to document if not already added
+    if (!document.getElementById('point-selection-style')) {
+        const style = document.createElement('style');
+        style.id = 'point-selection-style';
+        style.textContent = `
+            .point-item.selected {
+                background-color:rgb(43, 43, 43);
+                outline: 2px solid #3498db;
+                border-radius: 4px;
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
+    // Store selected points and last selected index for range selection
+    window.selectedPoints = new Set(); // Make it global so drawGrid can access it
+    let lastSelectedIndex = -1;
+
+    // Add click handlers for point selection
+    const pointItems = list.querySelectorAll('.point-item');
+    pointItems.forEach((item) => {
+        item.addEventListener('click', (event) => {
+            const index = parseInt(item.dataset.index);
+            
+            // Ctrl/Command key for individual selection toggling
+            if (event.ctrlKey || event.metaKey) {
+                if (window.selectedPoints.has(index)) {
+                    window.selectedPoints.delete(index);
+                    item.classList.remove('selected');
+                } else {
+                    window.selectedPoints.add(index);
+                    item.classList.add('selected');
+                    lastSelectedIndex = index;
+                }
+            } 
+            // Shift key for range selection
+            else if (event.shiftKey && lastSelectedIndex !== -1) {
+                // Clear existing selection visually
+                pointItems.forEach(p => p.classList.remove('selected'));
+                
+                // Determine range bounds
+                const start = Math.min(lastSelectedIndex, index);
+                const end = Math.max(lastSelectedIndex, index);
+                
+                // Select all points in the range
+                for (let i = start; i <= end; i++) {
+                    window.selectedPoints.add(i);
+                    pointItems[i].classList.add('selected');
+                }
+            } 
+            // Normal click - select just this one
+            else {
+                pointItems.forEach(p => p.classList.remove('selected'));
+                window.selectedPoints.clear();
+                window.selectedPoints.add(index);
+                item.classList.add('selected');
+                lastSelectedIndex = index;
+            }
+            
+            // Redraw grid to show selected points with gold outline
+            drawGrid();
+            
+            // Prevent the event from affecting inputs
+            event.stopPropagation();
+        });
+    });
+
+    // Function to clear all selections
+    function clearAllSelections() {
+        pointItems.forEach(p => p.classList.remove('selected'));
+        window.selectedPoints.clear();
+        lastSelectedIndex = -1;
+        drawGrid(); // Redraw grid to remove gold outlines
+    }
+
+        // Add keyboard event listener for delete key and escape key
+        document.addEventListener('keydown', (event) => {
+            // Delete key handling
+            if (event.key === 'Delete' && window.selectedPoints.size > 0) {
+                // Save current state to undo stack before deletion
+                undoStack.push(JSON.parse(JSON.stringify(points)));
+                redoStack = [];
+                
+                // Convert set to array and sort in descending order
+                // to avoid index shifting during deletion
+                const indicesToDelete = Array.from(window.selectedPoints).sort((a, b) => b - a);
+                
+                // Delete points
+                indicesToDelete.forEach(index => {
+                    points.splice(index, 1);
+                });
+                
+                // Redraw everything
+                window.selectedPoints.clear();
+                lastSelectedIndex = -1;
+                updatePointsList();
+                drawGrid();
+                const pathName = document.getElementById("pathName").textContent;
+                addToRecentPaths(pathName, [...points]);
+            }
+
+        
+        
+        // Escape key handling - clear all selections
+        if (event.key === 'Escape') {
+            clearAllSelections();
+        }
+    });
+
     // scrolling to change values
     const vertical_inputs = list.querySelectorAll('input[type="vertical-number"]');
     vertical_inputs.forEach((input) => {
@@ -300,6 +421,11 @@ function updatePointsList() {
                 input.value = Math.max(currentValue - step, parseFloat(input.min) || -Infinity);
             }
             input.dispatchEvent(new Event('change'));
+        });
+        
+        // Prevent input click events from triggering parent selection
+        input.addEventListener('click', (event) => {
+            event.stopPropagation();
         });
     });
 }
