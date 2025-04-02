@@ -6,8 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AutoGrid Planner - Team 785Z</title>
   <link rel="icon" type="image/x-icon" href="AutoGridLogo.ico">
-  <link rel="stylesheet" href="theme.css">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="styles/theme.css">
+  <link rel="stylesheet" href="styles/style.css">
+  <link rel="stylesheet" href="styles/bars.css">
+  <link rel="stylesheet" href="styles/buttons.css">
   <!-- Chromebook Screen -->
   <!-- <link rel="stylesheet" href="chrombook.css"> -->
 </head>
@@ -199,6 +201,12 @@ inputs.forEach((input) => {
         // Display screen size in the text box
         const textBox = document.getElementById("screenSize");
         textBox.value = `Width: ${screenWidth}px, Height: ${screenHeight}px`;
+
+
+        document.addEventListener('contextmenu', function(event) {
+  event.preventDefault();
+  return false;
+}, true);
   </script>
 </body>
 
