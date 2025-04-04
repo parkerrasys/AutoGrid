@@ -131,6 +131,19 @@ body {
   background: var(--bg-secondary);
 }
 
+#allianceSelector {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#allianceSelector:hover {
+  background: var(--bg-secondary);
+}
+
 #pathTypeSelector {
   background: var(--bg-tertiary);
   color: var(--text-primary);
@@ -247,6 +260,7 @@ main {
   border-radius: 8px;
   border: 1px solid var(--border-color);
   flex-direction: column;
+  position: relative; /* Added to allow absolute positioning of loading GIF */
 }
 
 .grid-canvas {
@@ -453,4 +467,40 @@ input[type="vertical-number"] {
   &:hover::-webkit-outer-spin-button {
     -webkit-appearance: none;
   }
+}
+
+.grid-loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--bg-primary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+:root {
+  --loading-gif-size: 128px;
+}
+
+.grid-loading {
+  flex-direction: column;
+}
+
+.grid-loading img {
+  width: var(--loading-gif-size);
+  height: var(--loading-gif-size);
+}
+
+.grid-loading::after {
+  content: "Loading";
+  display: block;
+  color: #0097FB;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 10px;
+  font-size: 18px;
 }

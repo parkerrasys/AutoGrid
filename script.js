@@ -15,6 +15,12 @@ if (localStorage.getItem("recentPaths")) {
 function initGrid() {
     canvas = document.getElementById("grid");
     ctx = canvas.getContext("2d");
+    
+    // Hide loading immediately after grid is initialized
+    const loadingElement = document.getElementById('gridLoading');
+    if (loadingElement) {
+        loadingElement.style.display = 'none';
+    }
 
     canvas.width = GRID_SIZE * TILE_SIZE;
     canvas.height = GRID_SIZE * TILE_SIZE;
@@ -230,7 +236,14 @@ function handleGridClick(e) {
     const y = e.clientY - rect.top;
 
     let { x: gridX, y: gridY } = canvasToGrid(x, y);
-    addPoint(gridX, gridY);
+
+    // Only check against the last point to prevent immediate stacking
+    const lastPoint = points[points.length - 1];
+    const isStackedOnLastPoint = lastPoint && lastPoint.x === gridX && lastPoint.y === gridY;
+
+    if (!isStackedOnLastPoint) {
+        addPoint(gridX, gridY);
+    }
 }
 
 function addPoint(x, y) {
@@ -500,8 +513,8 @@ function showContextMenu(e) {
     let nearLine = false;
     let lineStartIndex = -1;
 
-    // Check if near a point
-    for (let i = 0; i < points.length; i++) {
+    // Check if near a point - loop backward to find newest points first
+    for (let i = points.length - 1; i >= 0; i--) {
         const point = points[i];
         const canvasPoint = gridToCanvas(point.x, point.y);
         const distance = Math.sqrt(Math.pow(x - canvasPoint.x, 2) + Math.pow(y - canvasPoint.y, 2));
@@ -1232,7 +1245,7 @@ function addToRecentPaths(name, pathPoints) {
     const path = { name, points: pathPoints };
     recentPaths = recentPaths.filter((p) => p.name !== name);
     recentPaths.unshift(path);
-    if (recentPaths.length > 10) recentPaths.pop();
+    if (recentPaths.length > 1000) recentPaths.pop();
     localStorage.setItem("recentPaths", JSON.stringify(recentPaths));
     updateRecentPathsDropdown();
 }
