@@ -173,23 +173,35 @@ header {
     font-size: 18px;
   }
 
-  .header-buttons .nav-button {
+  .mobile-dropdown {
     display: none;
   }
 
-  .mobile-dropdown {
-    display: block;
-    position: relative;
+  @media screen and (max-width: 768px) {
+    .header-buttons .nav-button {
+      display: none;
+    }
+
+    .mobile-dropdown {
+      display: block;
+      position: relative;
+    }
   }
 
   .mobile-dropdown select {
-    padding: 8px;
+    padding: 8px 16px;
     background: var(--bg-tertiary);
     color: var(--text-primary);
     border: 1px solid var(--border-color);
     border-radius: 4px;
     margin-right: 10px;
-  }
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.mobile-dropdown select:hover {
+    background: var(--bg-secondary);
+}
 
   .screen-warning {
     display: block;
