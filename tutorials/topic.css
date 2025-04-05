@@ -334,3 +334,12 @@ header {
   gap: 10px;
   align-items: center;
 }
+
+a {
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline !important;
+}

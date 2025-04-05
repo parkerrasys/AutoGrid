@@ -725,6 +725,8 @@ if (nearPoint) {
                 updatePointsList();
                 drawGrid();
                 updateSimulationButton();
+                const pathName = document.getElementById("pathName").textContent;
+                addToRecentPaths(pathName, [...points]);
             },
             style: "color:rgb(253, 95, 95);",
         },
@@ -737,6 +739,8 @@ if (nearPoint) {
                     updatePointsList();
                     drawGrid();
                     updateSimulationButton();
+                    const pathName = document.getElementById("pathName").textContent;
+                    addToRecentPaths(pathName, [...points]);
                 },
                 style: "color:rgb(250, 96, 255);",
             },
@@ -749,6 +753,8 @@ if (nearPoint) {
                     updatePointsList();
                     drawGrid();
                     updateSimulationButton();
+                    const pathName = document.getElementById("pathName").textContent;
+                    addToRecentPaths(pathName, [...points]);
                 },
                 style: "color:rgb(255, 160, 52);",
             },
@@ -766,6 +772,8 @@ if (nearPoint) {
                 updatePointsList();
                 drawGrid();
                 updateSimulationButton();
+                const pathName = document.getElementById("pathName").textContent;
+                addToRecentPaths(pathName, [...points]);
             },
             style: "color:rgb(250, 96, 255);",
         },
@@ -778,6 +786,8 @@ if (nearPoint) {
                 updatePointsList();
                 drawGrid();
                 updateSimulationButton();
+                const pathName = document.getElementById("pathName").textContent;
+                addToRecentPaths(pathName, [...points]);
             },
             style: "color:rgb(255, 160, 52);",
         },

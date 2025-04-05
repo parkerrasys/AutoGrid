@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="/AutoGridLogo.ico">
+  <link rel="stylesheet" href="/styles/theme.css">
+  <link rel="stylesheet" href="/styles/style.css">
+  <link rel="stylesheet" href="/tutorials/topic.css">
+  <link rel="stylesheet" href="/tutorials/question.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <div class="screen-warning">
+    <span class="close-warning" onclick="this.parentElement.style.display='none'">×</span>
+    Screen size may be crowded on this device. Consider rotating your device for a better experience.
+  </div>
+</head>
+<body>
+  <header>
+    <div class="logo-title">
+      <img id="logo" class="autogridlogo" src="/AutoGridLogoIntro.gif" alt="AutoGrid Logo">
+      <div class="title">AutoGrid Tutorials ~ <i id="title_name"></i></div>
+    </div>
+    <div class="header-buttons">
+      <div class="mobile-dropdown">
+        <select onchange="window.location.href=this.value">
+          <option value="">Links</option>
+          <option value="/index.html">Home</option>
+          <option value="/docs/home.html">Docs.</option>
+          <option value="/tutorials/home.html">Tutorials</option>
+        </select>
+      </div>
+      <a href="/tutorials/question.html" class="nav-button"><i class="fas fa-question"></i>Still Need Help</a>
+      <a href="/index.html" class="nav-button"><i class="fas fa-home"></i> Home</a>
+      <a href="/docs/home.html" class="nav-button"><i class="fas fa-book"></i> Docs.</a>
+      <a href="/tutorials/home.html" class="nav-button"><i class="fas fa-graduation-cap"></i> Tutorials</a>
+      <select id="themeSelector" onchange="changeTheme(this.value)">
+        <option value="dark">Default Dark</option>
+        <option value="light">Default Light</option>
+        <option value="midnight">Midnight Dream</option>
+        <option value="ocean">Ocean Breeze</option>
+        <option value="forest">Forest Mist</option>
+        <option value="sunset">Too Much Purple</option>
+        <option value="retro">Retro Wave</option>
+        <option value="nord">Classic Grey</option>
+        <option value="mocha">Midnight Purple</option>
+        <option value="cyber">Cyber Punk</option>
+        <option value="devpref">Dev's Preference</option>
+      </select>
+    </div>
+  </header>
+
+  <button class="mobile-menu-btn" onclick="toggleSidebar()">
+    <i class="fas fa-bars"></i>
+  </button>
+  <div class="content-wrapper">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <h3><i class="fas fa-question-circle"></i> <i id="sidebar_name"></i></h3>
+        <ul>
+          <!-- <li><a href="#contact">Contact Support</a></li> -->
+          <li><a href="#resources">Additional Resources</a></li>
+          <li><a href="#faq">Common Issues</a></li>
+          <li><a href="#community">Community Help</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="tutorial-content">
+      <div class="breadcrumb">
+        <i class="fas fa-folder"></i><a style="text-decoration: none;" href="/index.html">AutoGrid</a>/<a style="text-decoration: none;" href="/tutorials/home.html">Tutorial Topics</a>/<a id="top_name" style="text-decoration: none;" href="/tutorials/question.html"></a>
+      </div>
+
+      <!-- <section id="contact" class="tutorial-section">
+        <h2><i class="fas fa-envelope"></i> Contact Support</h2>
+        <p>Still having trouble with AutoGrid? We're here to help! Feel free to reach out directly at <a href="mailto:parker.rasys@gmail.com" class="support-email">parker.rasys@gmail.com</a> with your specific questions.</p>
+        <div class="contact-form">
+          <h3>Quick Contact Form</h3>
+          <form id="helpForm">
+            <div class="form-group">
+              <label for="name">Name:</label>
+              <input type="text" id="name" name="name" placeholder="Your name">
+            </div>
+            <div class="form-group">
+              <label for="email">Email:</label>
+              <input type="email" id="email" name="email" placeholder="Your email">
+            </div>
+            <div class="form-group">
+              <label for="issue">Issue Category:</label>
+              <select id="issue" name="issue">
+                <option value="">Select issue type...</option>
+                <option value="path">Path Planning</option>
+                <option value="simulation">Simulation Issues</option>
+                <option value="export">Export Problems</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="message">Describe your issue:</label>
+              <textarea id="message" name="message" rows="5" placeholder="Please provide details about your issue..."></textarea>
+            </div>
+            <button type="submit" class="submit-btn">Send Message</button>
+          </form>
+        </div>
+      </section> -->
+
+      <section id="resources" class="tutorial-section">
+        <h2><i class="fas fa-book-open"></i> Additional Resources</h2>
+        <p>Before reaching out, consider reviewing these helpful resources:</p>
+        <div class="resources-grid">
+          <div class="resource-card">
+            <i class="fas fa-file-alt"></i>
+            <h3>Documentation</h3>
+            <p>Our comprehensive <a href="/docs/home.html">documentation</a> covers all AutoGrid features in detail.</p>
+          </div>
+          <div class="resource-card">
+            <i class="fas fa-graduation-cap"></i>
+            <h3>Tutorials</h3>
+            <p>Review our step-by-step <a href="/tutorials/home.html">tutorials</a> for practical guidance.</p>
+          </div>
+          <div class="resource-card">
+            <i class="fas fa-video"></i>
+            <h3>Video Guides</h3>
+            <p>Visual learner? Check our <a href="#">video tutorials</a> on common workflows.</p>
+          </div>
+          <div class="resource-card">
+            <i class="fas fa-download"></i>
+            <h3>Sample Files</h3>
+            <p>Download <a href="#">example projects</a> to see AutoGrid in action.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="faq" class="tutorial-section">
+        <h2><i class="fas fa-question-circle"></i> Common Issues</h2>
+        <div class="faq-container">
+          <div class="faq-item">
+            <div class="faq-question">
+              <h3>Why arn't my recent paths loading?</h3>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+              <p>Your recent paths might not be loading becuase of an issue on your end, or you have too many paths. Try refreshing the tab or clearing the site data to fix the issue. (This would remove all recent paths)</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-question">
+              <h3>Why cant I import a share code?</h3>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+              <p>The share code might not be importing correctly because you accidentally typed in the code. Try asking your friend for a new link and dont type in it at all.</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-question">
+              <h3>Why I cant export, share, or build my path?</h3>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+              <p>You arnt able to export, share, or build empty paths! Make sure you have a recent path that has a path drawn selected, then try exporting, sharing, or building again.</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-question">
+              <h3>How do I use built code?</h3>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+              <p>In order to use the built output, you must download the AutoGrid Competition Template from our github <a href="https://github.com/parkerrasys/AutoGrid" target="_blank">here</a>. Then replace the default autonomous code with the built code and upload!</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="community" class="tutorial-section">
+        <h2><i class="fas fa-users"></i> Community Help</h2>
+        <p>Connect with other AutoGrid users who might have encountered and solved similar issues! You can also fill out a google form to get a response from an AutoGrid developer:</p>
+        <div class="community-links">
+          <!-- <a href="#" class="community-button">
+            <i class="fab fa-discord"></i>
+            Join our Discord Server
+          </a> -->
+          <!-- <a href="#" class="community-button">
+            <i class="fab fa-reddit"></i>
+            AutoGrid Subreddit
+          </a> -->
+          <a href="https://forms.gle/a1pkJnhp4eu3UzGt7" target="_blank" class="community-button">
+            <i class="fab fa-google"></i>
+            Fill Out a Form
+          </a>
+          <a href="https://github.com/parkerrasys/AutoGrid-Planner/issues" target="_blank" class="community-button">
+            <i class="fab fa-github"></i>
+            GitHub Issues
+          </a>
+          <!-- <a href="#" class="community-button">
+            <i class="fas fa-comment-dots"></i>
+            Forums
+          </a> -->
+        </div>
+      </section>
+    </main>
+  </div>
+  <script>
+    const topic_name = "Still Need Help";
+    document.addEventListener('DOMContentLoaded', function() {
+      document.title = `AutoGrid: ${topic_name}`;
+      document.getElementById('sidebar_name').textContent = topic_name;
+      document.getElementById('top_name').textContent = topic_name;
+      document.getElementById('title_name').textContent = topic_name;
+      
+      // FAQ toggle functionality
+      const faqItems = document.querySelectorAll('.faq-question');
+      faqItems.forEach(item => {
+        item.addEventListener('click', () => {
+          const answer = item.nextElementSibling;
+          const icon = item.querySelector('i');
+          
+          answer.classList.toggle('active');
+          icon.classList.toggle('fa-chevron-down');
+          icon.classList.toggle('fa-chevron-up');
+        });
+      });
+      
+      // Form submission handler (placeholder)
+      const helpForm = document.getElementById('helpForm');
+      if (helpForm) {
+        helpForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          alert('Thank you for your message! Our support team will respond shortly.');
+          helpForm.reset();
+        });
+      }
+    });
+
+    function changeTheme(theme) {
+      document.body.setAttribute('data-theme', theme);
+      localStorage.setItem('theme', theme);
+    }
+    
+    document.addEventListener('DOMContentLoaded', () => {
+      const savedTheme = localStorage.getItem('theme') || 'dark';
+      document.body.setAttribute('data-theme', savedTheme);
+      document.getElementById('themeSelector').value = savedTheme;
+    });
+    
+    function toggleSidebar() {
+      const sidebar = document.querySelector('.sidebar');
+      sidebar.classList.toggle('active');
+    }
+
+    const delay = 1250;
+    const preloadImage = new Image();
+    preloadImage.src = "/AutoGridAnimationLoop.gif";
+    const logoElement = document.getElementById("logo");
+
+    setTimeout(() => {
+      logoElement.src = preloadImage.src;
+    }, delay);
+  </script>
+</body>
+</html>

@@ -78,6 +78,7 @@ header {
   align-items: center;
 }
 
+/* Adding mobile dropdown for tutorials to match docs */
 .mobile-dropdown {
   display: none;
 }
@@ -106,6 +107,7 @@ header {
   color: #666;
 }
 
+/* Mobile styles */
 @media screen and (max-width: 768px) {
   .screen-warning {
     display: block;
@@ -122,40 +124,6 @@ header {
     z-index: 100;
   }
 
-  .sidebar {
-    position: fixed;
-    left: -280px;
-    top: 70px;
-    height: calc(100vh - 70px);
-    width: 280px;
-    transition: left 0.3s ease;
-    z-index: 99;
-  }
-
-  .content-wrapper {
-    margin-top: 70px;
-  }
-
-  @media (min-width: 769px) {
-    .sidebar {
-      left: 0 !important;
-    }
-    .mobile-menu-btn {
-      display: none !important;
-    }
-  }
-
-  .header-buttons {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  #themeSelector {
-    min-width: 120px;
-    width: auto;
-  }
-
   .mobile-menu-btn {
     display: block;
     position: fixed;
@@ -165,10 +133,8 @@ header {
   }
 
   .content-wrapper {
+    margin-top: 70px;
     top: 120px;
-  }
-
-  .content-wrapper {
     grid-template-columns: 1fr;
   }
 
@@ -188,20 +154,20 @@ header {
     box-shadow: 2px 0 10px rgba(0,0,0,0.3);
   }
 
-  .doc-content {
+  .tutorial-content {
     margin-left: 0;
     padding: 15px;
   }
 
-  .doc-section {
+  .tutorial-section {
     padding: 15px;
   }
 
-  .doc-section h2 {
+  .tutorial-section h2 {
     font-size: 1.3em;
   }
 
-  .doc-section p {
+  .tutorial-section p {
     font-size: 0.95em;
     line-height: 1.5;
   }
@@ -209,22 +175,17 @@ header {
   .title {
     font-size: 18px;
   }
-
-  .mobile-dropdown {
+  
+  /* Adding mobile dropdown functionality for tutorials */
+  .header-buttons .nav-button {
     display: none;
   }
 
-  @media screen and (max-width: 768px) {
-    .header-buttons .nav-button {
-      display: none;
-    }
-
-    .mobile-dropdown {
-      display: block;
-      position: relative;
-    }
+  .mobile-dropdown {
+    display: block;
+    position: relative;
   }
-
+  
   .mobile-dropdown select {
     padding: 8px 16px;
     background: var(--bg-tertiary);
@@ -234,28 +195,37 @@ header {
     margin-right: 10px;
     font-size: 14px;
     cursor: pointer;
-}
+  }
 
-.mobile-dropdown select:hover {
+  .mobile-dropdown select:hover {
     background: var(--bg-secondary);
+  }
 }
 
-  .screen-warning {
-    display: block;
+/* Desktop styles */
+@media (min-width: 769px) {
+  .sidebar {
+    left: 0 !important;
+  }
+  .mobile-menu-btn {
+    display: none !important;
+  }
+  .mobile-dropdown {
+    display: none !important;
   }
 }
 
 /* Tablet adjustments */
 @media screen and (min-width: 769px) and (max-width: 1024px) {
-  .doc-section {
+  .tutorial-section {
     padding: 20px;
   }
 
-  .doc-section h2 {
+  .tutorial-section h2 {
     font-size: 1.4em;
   }
 
-  .doc-section p {
+  .tutorial-section p {
     font-size: 1em;
   }
 }
@@ -304,7 +274,7 @@ header {
   color: var(--text-primary);
 }
 
-.doc-content {
+.tutorial-content {
   flex: 1;
   padding: 20px 40px;
   overflow-y: auto;
@@ -320,7 +290,7 @@ header {
   gap: 8px;
 }
 
-.doc-section {
+.tutorial-section {
   background: var(--bg-secondary);
   padding: 25px;
   margin-bottom: 30px;
@@ -328,7 +298,7 @@ header {
   border: 1px solid var(--border-color);
 }
 
-.doc-section h2 {
+.tutorial-section h2 {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -336,7 +306,7 @@ header {
   color: var(--text-primary);
 }
 
-.doc-section p {
+.tutorial-section p {
   color: var(--text-secondary);
   line-height: 1.6;
 }
@@ -357,4 +327,19 @@ header {
 .nav-button:hover {
   background: var(--accent-color);
   color: var(--text-primary);
+}
+
+.header-buttons {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+a {
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline !important;
 }

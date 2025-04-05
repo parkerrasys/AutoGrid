@@ -4,53 +4,35 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AutoGrid Tutorials</title>
-  <link rel="icon" type="image/x-icon" href="AutoGridLogo.ico">
-  <link rel="stylesheet" href="styles/theme.css">
-  <link rel="stylesheet" href="styles/style.css">
-  <link rel="stylesheet" href="styles/tutorials.css">
+  <link rel="icon" type="image/x-icon" href="/AutoGridLogo.ico">
+  <link rel="stylesheet" href="/styles/theme.css">
+  <link rel="stylesheet" href="/styles/style.css">
+  <link rel="stylesheet" href="/tutorials/topic.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <div class="screen-warning">
     <span class="close-warning" onclick="this.parentElement.style.display='none'">×</span>
     Screen size may be crowded on this device. Consider rotating your device for a better experience.
   </div>
-  <div class="screen-warning">
-    <span class="close-warning" onclick="this.parentElement.style.display='none'">×</span>
-    Screen size may be crowded on this device. Consider rotating your device for a better experience.
-  </div>
-  <script>
-    function changeTheme(theme) {
-      document.body.setAttribute('data-theme', theme);
-      localStorage.setItem('theme', theme);
-    }
-    
-    document.addEventListener('DOMContentLoaded', () => {
-      const savedTheme = localStorage.getItem('theme') || 'dark';
-      document.body.setAttribute('data-theme', savedTheme);
-      document.getElementById('themeSelector').value = savedTheme;
-    });
-  function toggleSidebar() {
-      const sidebar = document.querySelector('.sidebar');
-      sidebar.classList.toggle('active');
-    }
-  </script>
 </head>
 <body>
   <header>
     <div class="logo-title">
-      <img class="autogridlogo" src="AutoGridLogoIntro.gif" alt="AutoGrid Logo">
-      <div class="title">AutoGrid Tutorials</div>
+      <img id="logo" class="autogridlogo" src="/AutoGridLogoIntro.gif" alt="AutoGrid Logo">
+      <div class="title">AutoGrid Tutorials ~ <i id="title_name"></i></div>
     </div>
     <div class="header-buttons">
       <div class="mobile-dropdown">
         <select onchange="window.location.href=this.value">
           <option value="">Links</option>
-          <option value="index.html">Home</option>
-          <option value="documentation.html">Documentation</option>
+          <option value="/index.html">Home</option>
+          <option value="/docs/home.html">Docs.</option>
+          <option value="/tutorials/home.html">Tutorials</option>
         </select>
       </div>
-      <a href="index.html" class="nav-button"><i class="fas fa-home"></i> Home</a>
-      <a href="documentation.html" class="nav-button"><i class="fas fa-book"></i> Documentation</a>
+      <a href="/tutorials/question.html" class="nav-button"><i class="fas fa-question"></i>Still Need Help</a>
+      <a href="/index.html" class="nav-button"><i class="fas fa-home"></i> Home</a>
+      <a href="/docs/home.html" class="nav-button"><i class="fas fa-book"></i> Docs.</a>
+      <a href="/tutorials/home.html" class="nav-button"><i class="fas fa-graduation-cap"></i> Tutorials</a>
       <select id="themeSelector" onchange="changeTheme(this.value)">
         <option value="dark">Default Dark</option>
         <option value="light">Default Light</option>
@@ -73,26 +55,18 @@
   <div class="content-wrapper">
     <nav class="sidebar">
       <div class="sidebar-section">
-        <h3><i class="fas fa-graduation-cap"></i> Beginner Tutorials</h3>
+        <h3><i class="fas fa-graduation-cap"></i> <i id="sidebar_name"></i></h3>
         <ul>
           <li><a href="#basics">Path Planning Basics</a></li>
           <li><a href="#first-path">Your First Path</a></li>
           <li><a href="#simulation">Running Simulations</a></li>
         </ul>
       </div>
-      <div class="sidebar-section">
-        <h3><i class="fas fa-route"></i> Advanced Tutorials</h3>
-        <ul>
-          <li><a href="#complex-paths">Complex Paths</a></li>
-          <li><a href="#optimization">Path Optimization</a></li>
-          <li><a href="#advanced-config">Advanced Configuration</a></li>
-        </ul>
-      </div>
     </nav>
 
     <main class="tutorial-content">
       <div class="breadcrumb">
-        <i class="fas fa-graduation-cap"></i> Tutorials / Beginner Tutorials
+        <i class="fas fa-folder"></i><a style="text-decoration: none;" href="/index.html">AutoGrid</a>/<a style="text-decoration: none;" href="/tutorials/home.html">Tutorial Topics</a>/<a id="top_name" style="text-decoration: none;" href="/tutorials/pagetemplate.html"></a>
       </div>
 
       <section id="basics" class="tutorial-section">
@@ -124,5 +98,42 @@
       </section>
     </main>
   </div>
+  <script>
+        const topic_name = "Test";
+        document.addEventListener('DOMContentLoaded', function() {
+            document.title = `Topic: ${topic_name}`;
+            document.getElementById('sidebar_name').textContent = topic_name;
+            document.getElementById('top_name').textContent = topic_name;
+            document.getElementById('title_name').textContent = topic_name;
+    });
+    
+
+    function changeTheme(theme) {
+      document.body.setAttribute('data-theme', theme);
+      localStorage.setItem('theme', theme);
+    }
+    
+    document.addEventListener('DOMContentLoaded', () => {
+      const savedTheme = localStorage.getItem('theme') || 'dark';
+      document.body.setAttribute('data-theme', savedTheme);
+      document.getElementById('themeSelector').value = savedTheme;
+    });
+  function toggleSidebar() {
+      const sidebar = document.querySelector('.sidebar');
+      sidebar.classList.toggle('active');
+    }
+
+
+    const delay = 1250;
+    const preloadImage = new Image();
+
+    preloadImage.src = "/AutoGridAnimationLoop.gif";
+
+    const logoElement = document.getElementById("logo");
+
+    setTimeout(() => {
+      logoElement.src = preloadImage.src;
+    }, delay);
+  </script>
 </body>
 </html>
