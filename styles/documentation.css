@@ -107,16 +107,53 @@ header {
 }
 
 @media screen and (max-width: 768px) {
+  .screen-warning {
+    display: block;
+  }
+
   header {
-    flex-direction: column;
+    flex-direction: row;
     gap: 10px;
     padding: 10px;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+  }
+
+  .sidebar {
+    position: fixed;
+    left: -280px;
+    top: 70px;
+    height: calc(100vh - 70px);
+    width: 280px;
+    transition: left 0.3s ease;
+    z-index: 99;
+  }
+
+  .content-wrapper {
+    margin-top: 70px;
+  }
+
+  @media (min-width: 769px) {
+    .sidebar {
+      left: 0 !important;
+    }
+    .mobile-menu-btn {
+      display: none !important;
+    }
   }
 
   .header-buttons {
-    width: 100%;
-    justify-content: center;
-    flex-wrap: wrap;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  #themeSelector {
+    min-width: 120px;
+    width: auto;
   }
 
   .mobile-menu-btn {
