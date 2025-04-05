@@ -5,10 +5,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AutoGrid Tutorials</title>
-  <link rel="icon" type="image/x-icon" href="/AutoGridLogo.ico">
-  <link rel="stylesheet" href="/styles/theme.css">
-  <link rel="stylesheet" href="/styles/style.css">
-  <link rel="stylesheet" href="/tutorials/homeStyle.css">
+  <link rel="icon" type="image/x-icon" href="AutoGridLogo.ico">
+  <link rel="stylesheet" href="styles/theme.css">
+  <link rel="stylesheet" href="styles/style.css">
+  <link rel="stylesheet" href="tutorials/homeStyle.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <div class="screen-warning">
     <span class="close-warning" onclick="this.parentElement.style.display='none'">×</span>
@@ -34,7 +34,7 @@
 <body>
   <header>
     <div class="logo-title">
-      <img id="logo" class="autogridlogo" src="/AutoGridLogoIntro.gif" alt="AutoGrid Logo">
+      <img id="logo" class="autogridlogo" src="AutoGridLogoIntro.gif" alt="AutoGrid Logo">
       <div class="title">AutoGrid Tutorials</div>
     </div>
     <div class="header-buttons">
@@ -45,9 +45,9 @@
           <option value="documentation.html">Docs.</option>
         </select>
       </div>
-      <a href="/tutorials/question.html" class="nav-button"><i class="fas fa-question"></i>Still Need Help</a>
-      <a href="/index.html" class="nav-button"><i class="fas fa-home"></i> Home</a>
-      <a href="/docs/home.html" class="nav-button"><i class="fas fa-book"></i> Docs.</a>
+      <a href="tutorials/question.html" class="nav-button"><i class="fas fa-question"></i>Still Need Help</a>
+      <a href="index.html" class="nav-button"><i class="fas fa-home"></i> Home</a>
+      <a href="docs/home.html" class="nav-button"><i class="fas fa-book"></i> Docs.</a>
       <select id="themeSelector" onchange="changeTheme(this.value)">
         <option value="dark">Default Dark</option>
         <option value="light">Default Light</option>
@@ -92,30 +92,30 @@
         <i class="fas fa-folder"></i><a style="text-decoration: none;" href="/index.html">AutoGrid</a>/<a style="text-decoration: none;" href="/tutorials/home.html">Tutorial Topics</a>
       </div>
 
-      <a style="text-decoration: none;" href="/tutorials/pagetemplate.html"> <section id="basics" class="tutorial-section">
+      <a style="text-decoration: none;" href="tutorials/pagetemplate.html"> <section id="basics" class="tutorial-section">
         <h2><i class="fas fa-map"></i> Path Planning Basics</h2>
         <p>Learn the fundamental concepts of path planning with AutoGrid.</p>
         <!-- Add tutorial content -->
       </section> </a>
 
-      <a style="text-decoration: none;" href="/tutorials/pagetemplate.html"> <section id="first-path" class="tutorial-section">
+      <a style="text-decoration: none;" href="tutorials/pagetemplate.html"> <section id="first-path" class="tutorial-section">
         <h2><i class="fas fa-star"></i> Your First Path</h2>
         <p>A step-by-step guide to creating your first autonomous path.</p>
         <!-- Add tutorial content -->
       </section> </a>
 
-      <a style="text-decoration: none;" href="/tutorials/pagetemplate.html"> <section class="tutorial-section">
+      <a style="text-decoration: none;" href="tutorials/pagetemplate.html"> <section class="tutorial-section">
         <h2><i class="fas fa-map-marked-alt"></i> Multi-Point Paths</h2>
         <p>Learn how to create complex paths with multiple waypoints and smooth transitions between them. This tutorial covers advanced path planning techniques and optimization strategies.</p>
       </section> </a>
 
-      <a style="text-decoration: none;" href="/tutorials/pagetemplate.html"> <section class="tutorial-section">
+      <a style="text-decoration: none;" href="tutorials/pagetemplate.html"> <section class="tutorial-section">
         <h2><i class="fas fa-ruler-combined"></i> Robot Measurements</h2>
         <p>Accurately measure and configure your robot's physical parameters. This tutorial explains how to input dimensions and movement constraints for optimal path generation.</p>
       </section> </a>
 
       <!-- Added 18 more similar sections with different icons and content -->
-      <a style="text-decoration: none;" href="/tutorials/pagetemplate.html"> <section class="tutorial-section">
+      <a style="text-decoration: none;" href="tutorials/pagetemplate.html"> <section class="tutorial-section">
         <h2><i class="fas fa-file-export"></i> Exporting Paths</h2>
         <p>Master the process of exporting your paths to various formats compatible with different robot control systems. Learn about file formats and integration options.</p>
       </section> </a>
@@ -125,7 +125,7 @@
     const delay = 1250;
     const preloadImage = new Image();
 
-    preloadImage.src = "/AutoGridAnimationLoop.gif";
+    preloadImage.src = "AutoGridAnimationLoop.gif";
 
     const logoElement = document.getElementById("logo");
 
