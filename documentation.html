@@ -1,6 +1,6 @@
-
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,14 +15,19 @@
       document.body.setAttribute('data-theme', theme);
       localStorage.setItem('theme', theme);
     }
-    
+
     document.addEventListener('DOMContentLoaded', () => {
       const savedTheme = localStorage.getItem('theme') || 'dark';
       document.body.setAttribute('data-theme', savedTheme);
       document.getElementById('themeSelector').value = savedTheme;
     });
+    function toggleSidebar() {
+      const sidebar = document.querySelector('.sidebar');
+      sidebar.classList.toggle('active');
+    }
   </script>
 </head>
+
 <body>
   <header>
     <div class="logo-title">
@@ -48,13 +53,16 @@
     </div>
   </header>
 
+  <button class="mobile-menu-btn" onclick="toggleSidebar()">
+    <i class="fas fa-bars"></i>
+  </button>
   <div class="content-wrapper">
     <nav class="sidebar">
       <div class="sidebar-section">
         <h3><i class="fas fa-book"></i> Getting Started</h3>
         <ul>
           <li><a href="#introduction">Introduction</a></li>
-          <li><a href="#installation">Installation / Usage</a></li>
+          <li><a href="#installation">Installation</a></li>
           <li><a href="#quick-start">Quick Start Guide</a></li>
         </ul>
       </div>
@@ -66,45 +74,25 @@
           <li><a href="#simulation">Simulation</a></li>
         </ul>
       </div>
-      <!-- <div class="sidebar-section">
-        <h3><i class="fas fa-code"></i> Advanced Usage</h3>
-        <ul>
-          <li><a href="#export">Exporting Paths</a></li>
-          <li><a href="#custom">Customization</a></li>
-        </ul>
-      </div> -->
     </nav>
 
     <main class="doc-content">
       <div class="breadcrumb">
         <i class="fas fa-home"></i> Documentation / Getting Started
       </div>
-      
+
       <section id="introduction" class="doc-section">
         <h2><i class="fas fa-info-circle"></i> Introduction</h2>
-        <p>AutoGrid is a powerful tool for planning autonomous routines in robotics competitions. This documentation will help you understand its features and capabilities.</p>
+        <p>AutoGrid is a powerful tool for planning autonomous routines in robotics competitions. This documentation
+          will help you understand its features and capabilities.</p>
       </section>
 
       <section id="installation" class="doc-section">
-        <h2><i class="fas fa-download"></i> Installation / Usage</h2>
+        <h2><i class="fas fa-download"></i> Installation</h2>
         <p>AutoGrid is a web-based application, no installation required. Simply visit the website to get started.</p>
       </section>
-
-      <!-- <section class="doc-section">
-        <h2><i class="fas fa-code"></i> Path Generation</h2>
-        <p>Learn how AutoGrid generates paths efficiently using advanced algorithms and mathematical models. The path generation system takes into account robot dimensions, field constraints, and game-specific requirements.</p>
-      </section>
-
-      <section class="doc-section">
-        <h2><i class="fas fa-robot"></i> Robot Configuration</h2>
-        <p>Configure your robot's physical parameters including dimensions, wheel configuration, and movement constraints. These settings are crucial for accurate path planning and simulation.</p>
-      </section>
-
-      <section class="doc-section">
-        <h2><i class="fas fa-cog"></i> Advanced Settings</h2>
-        <p>Dive deep into AutoGrid's advanced configuration options. Customize path smoothing, acceleration profiles, and timing parameters to optimize your autonomous routines.</p>
-      </section> -->
     </main>
   </div>
 </body>
+
 </html>

@@ -21,6 +21,10 @@
       document.body.setAttribute('data-theme', savedTheme);
       document.getElementById('themeSelector').value = savedTheme;
     });
+  function toggleSidebar() {
+      const sidebar = document.querySelector('.sidebar');
+      sidebar.classList.toggle('active');
+    }
   </script>
 </head>
 <body>
@@ -48,6 +52,9 @@
     </div>
   </header>
 
+  <button class="mobile-menu-btn" onclick="toggleSidebar()">
+    <i class="fas fa-bars"></i>
+  </button>
   <div class="content-wrapper">
     <nav class="sidebar">
       <div class="sidebar-section">
