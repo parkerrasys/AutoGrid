@@ -72,12 +72,28 @@ header {
 }
 
 @media screen and (max-width: 768px) {
+  header {
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+  }
+
+  .header-buttons {
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
   .mobile-menu-btn {
     display: block;
     position: fixed;
-    top: 80px;
+    top: 120px;
     left: 10px;
     z-index: 100;
+  }
+
+  .content-wrapper {
+    top: 120px;
   }
 
   .content-wrapper {
