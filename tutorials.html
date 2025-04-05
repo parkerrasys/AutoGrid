@@ -10,6 +10,10 @@
   <link rel="stylesheet" href="styles/style.css">
   <link rel="stylesheet" href="styles/tutorials.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <div class="screen-warning">
+    <span class="close-warning" onclick="this.parentElement.style.display='none'">×</span>
+    Screen size may be crowded on this device. Consider rotating your device for a better experience.
+  </div>
   <script>
     function changeTheme(theme) {
       document.body.setAttribute('data-theme', theme);
@@ -34,6 +38,13 @@
       <div class="title">AutoGrid Tutorials</div>
     </div>
     <div class="header-buttons">
+      <div class="mobile-dropdown">
+        <select onchange="window.location.href=this.value">
+          <option value="">Navigation</option>
+          <option value="index.html">Home</option>
+          <option value="documentation.html">Documentation</option>
+        </select>
+      </div>
       <a href="index.html" class="nav-button"><i class="fas fa-home"></i> Home</a>
       <a href="documentation.html" class="nav-button"><i class="fas fa-book"></i> Documentation</a>
       <select id="themeSelector" onchange="changeTheme(this.value)">
