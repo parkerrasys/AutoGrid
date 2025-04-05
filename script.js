@@ -715,17 +715,44 @@ if (nearPoint) {
     );
 } else if (nearLine) {
     const gridPos = canvasToGrid(x, y);
-    menuItems.push({
-        text: "Add Point Here",
+    menuItems.push(
+        {
+        text: "Insert moveTo Point",
         action: () => {
-            undoStack.push(JSON.parse(JSON.stringify(points)));
-            redoStack = [];
-            points.splice(lineStartIndex + 1, 0, { x: gridPos.x, y: gridPos.y });
-            updatePointsList();
-            drawGrid();
-            updateSimulationButton();
+                undoStack.push(JSON.parse(JSON.stringify(points)));
+                redoStack = [];
+                points.splice(lineStartIndex + 1, 0, { x: gridPos.x, y: gridPos.y });
+                updatePointsList();
+                drawGrid();
+                updateSimulationButton();
+            },
+            style: "color:rgb(253, 95, 95);",
         },
-    });
+        {
+            text: "Insert lookAt Point",
+            action: () => {
+                    undoStack.push(JSON.parse(JSON.stringify(points)));
+                    redoStack = [];
+                    points.splice(lineStartIndex + 1, 0, { x: gridPos.x, y: gridPos.y, type: "lookAt" });
+                    updatePointsList();
+                    drawGrid();
+                    updateSimulationButton();
+                },
+                style: "color:rgb(250, 96, 255);",
+            },
+        {
+            text: "Insert reverseTo Point",
+            action: () => {
+                    undoStack.push(JSON.parse(JSON.stringify(points)));
+                    redoStack = [];
+                    points.splice(lineStartIndex + 1, 0, { x: gridPos.x, y: gridPos.y, type: "reverse" });
+                    updatePointsList();
+                    drawGrid();
+                    updateSimulationButton();
+                },
+                style: "color:rgb(255, 160, 52);",
+            },
+    );
 } else {
     // Add general options when clicking elsewhere on the grid
     const gridPos = canvasToGrid(x, y);
@@ -741,6 +768,18 @@ if (nearPoint) {
                 updateSimulationButton();
             },
             style: "color:rgb(250, 96, 255);",
+        },
+        {
+            text: "Add reverseTo Point",
+            action: () => {
+                undoStack.push(JSON.parse(JSON.stringify(points)));
+                redoStack = [];
+                points.push({ x: gridPos.x, y: gridPos.y, type: "reverse" });
+                updatePointsList();
+                drawGrid();
+                updateSimulationButton();
+            },
+            style: "color:rgb(255, 160, 52);",
         },
         {
             text: "Clear Path",
