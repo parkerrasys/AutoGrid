@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="styles/buttons.css">
   <!-- Chromebook Screen -->
   <!-- <link rel="stylesheet" href="chrombook.css"> -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
@@ -26,24 +27,43 @@
     <input type="text" id="screenSize" readonly>
           </div> -->
         <div class="title">AutoGrid Planner <span class="team-name">by team 785Z</span>
-          <a href="https://github.com/parkerrasys/AutoGrid-Planner" target="_blank" class="version-tag">v0.1.2</a> <a
-          href="https://github.com/parkerrasys/AutoGrid" target="_blank" class="github-link">AudoGrid</a> <a
-          href="https://docs.google.com/presentation/d/1aiBOhSg7OVF-M1JR4eFLC4Ffyx-BolteY37Xqyi4cFI/edit?usp=sharing" target="_blank" class="doc-tag">Documentation</a> 
+          <div class="dropdown">
+            <a href="#" class="version-tag"><i class="fas fa-code-branch"></i> v0.1.2</a>
+            <div class="dropdown-content">
+              <a href="https://github.com/parkerrasys/AutoGrid-Planner" target="_blank"><i class="fab fa-github"></i> View on GitHub</a>
+              <a href="https://github.com/parkerrasys/AutoGrid-Planner/releases" target="_blank"><i class="fas fa-tags"></i> Release Notes</a>
+            </div>
+          </div>
+          <div class="dropdown">
+            <a href="#" class="github-link"><i class="fab fa-github"></i> AutoGrid</a>
+            <div class="dropdown-content">
+              <a href="https://github.com/parkerrasys/AutoGrid" target="_blank"><i class="fas fa-code"></i> Source Code</a>
+              <a href="https://github.com/parkerrasys/AutoGrid/issues" target="_blank"><i class="fas fa-bug"></i> Report Issues</a>
+            </div>
+          </div>
+          <div class="dropdown">
+            <a href="#" class="doc-tag"><i class="fas fa-book"></i> Links</a>
+            <div class="dropdown-content">
+              <a href="documentation.html"><i class="fas fa-file-alt"></i> Documentation</a>
+              <a href="https://github.com/parkerrasys/AutoGrid-Planner/issues" target="_blank"><i class="fas fa-bug"></i> Bug Report</a>
+              <a href="tutorials.html"><i class="fas fa-graduation-cap"></i> Tutorials</a>
+            </div>
+          </div> 
         </div>
       </div>
       <div class="project-title">
         Name:<span id="pathName" class="path-name" onclick="editPathName()" title="Click to edit">Untitled</span>
         <div class="recent-paths-container">
-          Recent Paths: <select id="recentPaths" onchange="loadRecentPath(this.value)">
+          <i class="fas fa-history"></i> Recent Paths: <select id="recentPaths" onchange="loadRecentPath(this.value)">
             <option value="">Recent Paths</option>
           </select>
-          <button class="delete-recent" onclick="deleteSelectedPath()">Delete</button>
+          <button class="delete-recent" onclick="deleteSelectedPath()"><i class="fas fa-trash-alt"></i> Delete</button>
         </div>
       </div>
       <div class="header-buttons">
-        <button onclick="clearPath()">New Path</button>
-        <button onclick="importPath()">Import Path</button>
-        <button onclick="importSharePath()">Import Share Path</button>
+        <button onclick="clearPath()"><i class="fas fa-plus"></i> New Path</button>
+        <button onclick="importPath()"><i class="fas fa-file-import"></i> Import Path</button>
+        <button onclick="importSharePath()"><i class="fas fa-share-alt"></i> Import Share Path</button>
         <select id="themeSelector" onchange="changeTheme(this.value)">
           <option value="dark">Default Dark</option>
           <option value="light">Default Light</option>
@@ -62,15 +82,15 @@
     <main>
       <div class="left-sidebar">
         <div class="top-bar">
-          <button onclick="undo()">Undo</button>
-          <button onclick="redo()">Redo</button>
-          <button onclick="clearCurrentPath()" class="clear-button">Clear</button>
+          <button onclick="undo()"><i class="fas fa-undo"></i> Undo</button>
+          <button onclick="redo()"><i class="fas fa-redo"></i> Redo</button>
+          <button onclick="clearCurrentPath()" class="clear-button"><i class="fas fa-trash"></i> Clear</button>
         </div>
         <div class="points-list" id="pointsList"></div>
         <div class="bottom-bar">
-          <button onclick="exportPath()">Export</button>
-          <button onclick="sharePaths()">Share</button>
-          <button onclick="buildPath()">Build</button>
+          <button onclick="exportPath()"><i class="fas fa-file-export"></i> Export</button>
+          <button onclick="sharePaths()"><i class="fas fa-share"></i> Share</button>
+          <button onclick="buildPath()"><i class="fas fa-hammer"></i> Build</button>
         </div>
       </div>
       <div class="grid-container">
@@ -161,10 +181,10 @@
           </div>
         </div>
         <div class="bottom-bar">
-          <button onclick="simulatePath()" id="simButton">Simulate Path</button>
-          <button onclick="toggleSimulation()" id="pauseButton" style="display: none;">Pause</button>
-          <button onclick="stopSimulation()" id="stopButton" style="display: none;">Stop</button>
-          <button onclick="loopSimulation()" id="loopButton">Loop: Off</button>
+          <button onclick="simulatePath()" id="simButton"><i class="fas fa-play"></i> Simulate Path</button>
+          <button onclick="toggleSimulation()" id="pauseButton" style="display: none;"><i class="fas fa-pause"></i> Pause</button>
+          <button onclick="stopSimulation()" id="stopButton" style="display: none;"><i class="fas fa-stop"></i> Stop</button>
+          <button onclick="loopSimulation()" id="loopButton"><i class="fas fa-sync"></i> Loop: Off</button>
         </div>
       </div>
     </main>

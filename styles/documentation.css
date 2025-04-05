@@ -1,0 +1,161 @@
+
+/* Base styles */
+* {
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* Header styles */
+header {
+  background: var(--bg-secondary);
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+}
+
+.logo-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.autogridlogo {
+  width: 50px;
+  height: 50px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.team-name {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+/* Content layout */
+.content-wrapper {
+  position: fixed;
+  top: 70px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  overflow: hidden;
+}
+
+.sidebar {
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border-color);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.sidebar-section {
+  padding: 20px;
+}
+
+.sidebar-section h3 {
+  color: var(--text-primary);
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.sidebar-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-section ul li {
+  margin: 4px 0;
+}
+
+.sidebar-section ul li a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  display: block;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.sidebar-section ul li a:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.doc-content {
+  flex: 1;
+  padding: 20px 40px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.breadcrumb {
+  color: var(--text-secondary);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.doc-section {
+  background: var(--bg-secondary);
+  padding: 25px;
+  margin-bottom: 30px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+.doc-section h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+  color: var(--text-primary);
+}
+
+.doc-section p {
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* Navigation buttons */
+.nav-button {
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  text-decoration: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.nav-button:hover {
+  background: var(--accent-color);
+  color: var(--text-primary);
+}

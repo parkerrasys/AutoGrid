@@ -1,0 +1,110 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AutoGrid Documentation</title>
+  <link rel="icon" type="image/x-icon" href="AutoGridLogo.ico">
+  <link rel="stylesheet" href="styles/theme.css">
+  <link rel="stylesheet" href="styles/style.css">
+  <link rel="stylesheet" href="styles/documentation.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script>
+    function changeTheme(theme) {
+      document.body.setAttribute('data-theme', theme);
+      localStorage.setItem('theme', theme);
+    }
+    
+    document.addEventListener('DOMContentLoaded', () => {
+      const savedTheme = localStorage.getItem('theme') || 'dark';
+      document.body.setAttribute('data-theme', savedTheme);
+      document.getElementById('themeSelector').value = savedTheme;
+    });
+  </script>
+</head>
+<body>
+  <header>
+    <div class="logo-title">
+      <img class="autogridlogo" src="AutoGridLogoIntro.gif" alt="AutoGrid Logo">
+      <div class="title">AutoGrid Documentation <span class="team-name">by team 785Z</span></div>
+    </div>
+    <div class="header-buttons">
+      <a href="index.html" class="nav-button"><i class="fas fa-home"></i> Home</a>
+      <a href="tutorials.html" class="nav-button"><i class="fas fa-graduation-cap"></i> Tutorials</a>
+      <select id="themeSelector" onchange="changeTheme(this.value)">
+        <option value="dark">Default Dark</option>
+        <option value="light">Default Light</option>
+        <option value="midnight">Midnight Dream</option>
+        <option value="ocean">Ocean Breeze</option>
+        <option value="forest">Forest Mist</option>
+        <option value="sunset">Too Much Purple</option>
+        <option value="retro">Retro Wave</option>
+        <option value="nord">Classic Grey</option>
+        <option value="mocha">Midnight Purple</option>
+        <option value="cyber">Cyber Punk</option>
+        <option value="devpref">Dev's Preference</option>
+      </select>
+    </div>
+  </header>
+
+  <div class="content-wrapper">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <h3><i class="fas fa-book"></i> Getting Started</h3>
+        <ul>
+          <li><a href="#introduction">Introduction</a></li>
+          <li><a href="#installation">Installation / Usage</a></li>
+          <li><a href="#quick-start">Quick Start Guide</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <h3><i class="fas fa-cogs"></i> Core Concepts</h3>
+        <ul>
+          <li><a href="#path-planning">Path Planning</a></li>
+          <li><a href="#robot-config">Robot Configuration</a></li>
+          <li><a href="#simulation">Simulation</a></li>
+        </ul>
+      </div>
+      <!-- <div class="sidebar-section">
+        <h3><i class="fas fa-code"></i> Advanced Usage</h3>
+        <ul>
+          <li><a href="#export">Exporting Paths</a></li>
+          <li><a href="#custom">Customization</a></li>
+        </ul>
+      </div> -->
+    </nav>
+
+    <main class="doc-content">
+      <div class="breadcrumb">
+        <i class="fas fa-home"></i> Documentation / Getting Started
+      </div>
+      
+      <section id="introduction" class="doc-section">
+        <h2><i class="fas fa-info-circle"></i> Introduction</h2>
+        <p>AutoGrid is a powerful tool for planning autonomous routines in robotics competitions. This documentation will help you understand its features and capabilities.</p>
+      </section>
+
+      <section id="installation" class="doc-section">
+        <h2><i class="fas fa-download"></i> Installation / Usage</h2>
+        <p>AutoGrid is a web-based application, no installation required. Simply visit the website to get started.</p>
+      </section>
+
+      <!-- <section class="doc-section">
+        <h2><i class="fas fa-code"></i> Path Generation</h2>
+        <p>Learn how AutoGrid generates paths efficiently using advanced algorithms and mathematical models. The path generation system takes into account robot dimensions, field constraints, and game-specific requirements.</p>
+      </section>
+
+      <section class="doc-section">
+        <h2><i class="fas fa-robot"></i> Robot Configuration</h2>
+        <p>Configure your robot's physical parameters including dimensions, wheel configuration, and movement constraints. These settings are crucial for accurate path planning and simulation.</p>
+      </section>
+
+      <section class="doc-section">
+        <h2><i class="fas fa-cog"></i> Advanced Settings</h2>
+        <p>Dive deep into AutoGrid's advanced configuration options. Customize path smoothing, acceleration profiles, and timing parameters to optimize your autonomous routines.</p>
+      </section> -->
+    </main>
+  </div>
+</body>
+</html>
