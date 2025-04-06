@@ -662,11 +662,59 @@ if (nearPoint) {
         startingPointInfo.style.cssText = `
             padding: 5px 20px;
             color: rgb(0, 255, 0);
-            font-style: italic;
+            cursor: pointer;
+            position: relative;
         `;
         startingPointInfo.textContent = "Starting Point";
+        
+        // Create a submenu for starting point
+        const startPointSubmenu = document.createElement("div");
+        startPointSubmenu.style.cssText = `
+            position: absolute;
+            left: 100%;
+            top: 0;
+            background-color: #1a1a1a;
+            border: 1px solid #444;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            display: none;
+            z-index: 1001;
+            padding: 5px 20px;
+        `;
+        
+        const cannotChangeOption = document.createElement("div");
+        cannotChangeOption.style.cssText = `
+            padding: 5px 10px;
+            color: rgb(0, 255, 0);
+            font-style: italic;
+        `;
+        cannotChangeOption.textContent = "Unchangeable";
+        startPointSubmenu.appendChild(cannotChangeOption);
+        
+        // Show submenu on hover
+        startingPointInfo.onmouseover = () => {
+            startingPointInfo.style.background = "#2c2c2c";
+            startPointSubmenu.style.display = "block";
+        };
+        
+        startingPointInfo.onmouseout = (e) => {
+            if (!startPointSubmenu.contains(e.relatedTarget) && e.relatedTarget !== startPointSubmenu) {
+                startPointSubmenu.style.display = "none";
+                startingPointInfo.style.background = "transparent";
+            }
+        };
+        
+        startPointSubmenu.onmouseout = (e) => {
+            if (!startPointSubmenu.contains(e.relatedTarget) && e.relatedTarget !== startingPointInfo) {
+                startPointSubmenu.style.display = "none";
+                startingPointInfo.style.background = "transparent";
+            }
+        };
+        
+        startingPointInfo.appendChild(startPointSubmenu);
         contextMenu.appendChild(startingPointInfo);
     }
+
 
     // Add other point-related menu items (Delete Point, etc.)
     menuItems.push(

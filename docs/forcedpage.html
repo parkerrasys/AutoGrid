@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="../AutoGridLogo.ico">
+  <link rel="stylesheet" href="../styles/theme.css">
+  <link rel="stylesheet" href="../styles/style.css">
+  <link rel="stylesheet" href="../docs/topic.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <div class="screen-warning">
+    <span class="close-warning" onclick="this.parentElement.style.display='none'">×</span>
+    Screen size may be crowded on this device. Consider rotating your device for a better experience.
+  </div>
+</head>
+
+<body>
+  <header>
+    <div class="logo-title">
+      <img id="logo" class="autogridlogo" src="../AutoGridLogoIntro.gif" alt="AutoGrid Logo">
+      <div class="title">AutoGrid Documentation ~ <i id="title_name"></i></div>
+    </div>
+    <div class="header-buttons">
+      <div class="mobile-dropdown">
+        <select onchange="window.location.href=this.value">
+          <option value="">Links</option>
+          <option value="../index.html">Home</option>
+          <option value="../tutorials/home.html">Tutorials</option>
+          <option value="../docs/home.html">Docs.</option>
+        </select>
+      </div>
+      <a href="../index.html" class="nav-button"><i class="fas fa-home"></i> Home</a>
+      <a href="../tutorials/home.html" class="nav-button"><i class="fas fa-graduation-cap"></i> Tutorials</a>
+      <a href="../docs/home.html" class="nav-button"><i class="fas fa-book"></i> Docs.</a>
+      <select id="themeSelector" onchange="changeTheme(this.value)">
+        <option value="dark">Default Dark</option>
+        <option value="light">Default Light</option>
+        <option value="midnight">Midnight Dream</option>
+        <option value="ocean">Ocean Breeze</option>
+        <option value="forest">Forest Mist</option>
+        <option value="sunset">Too Much Purple</option>
+        <option value="retro">Retro Wave</option>
+        <option value="nord">Classic Grey</option>
+        <option value="mocha">Midnight Purple</option>
+        <option value="cyber">Cyber Punk</option>
+        <option value="devpref">Dev's Preference</option>
+      </select>
+    </div>
+  </header>
+
+  <button class="mobile-menu-btn" onclick="toggleSidebar()">
+    <i class="fas fa-bars"></i>
+  </button>
+  <div class="content-wrapper">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <h3><i class="fas fa-book"></i> <i id="sidebar_name"></i></h3>
+        <ul>
+          <li><a href="#overview">Overview</a></li>
+          <li><a href="#installation">Installation / Usage</a></li>
+          <li><a href="#getting-started">Getting Started</a></li>
+          <li><a href="#features">Key Features</a></li>
+          <li><a href="#commands">Commands Reference</a></li>
+          <li><a href="#tips">Tips & Best Practices</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="doc-content">
+      <div class="breadcrumb">
+        <i class="fas fa-folder"></i><a href="../index.html">AutoGrid</a> / <a href="../docs/home.html">Documentation Topics</a> / <a id="top_name" href="../docs/forcedpage.html"></a><i>(For the time being, documentation topics are locked to this page)</i>
+      </div>
+
+      <section id="overview" class="doc-section">
+        <h2><i class="fas fa-info-circle"></i> Overview</h2>
+        <p>AutoGrid is a powerful tool for planning autonomous routines in VEX Robotics. This documentation explains the platform's capabilities, features, and how to effectively use then with your robot</p>
+        <p>Whether you're new to robotics or an experienced competitor, AutoGrid provides intuitive interfaces and powerful planning tools to enhance your autonomous programming workflow.</p>
+      </section>
+
+      <section id="installation" class="doc-section">
+        <h2><i class="fas fa-download"></i> Installation / Usage</h2>
+        <p>AutoGrid is a web-based application, eliminating the need for installation. Simply access the platform through your web browser to get started. This approach ensures compatibility across different operating systems and devices.</p>
+        
+        <div class="info-box">
+          <h4><i class="fas fa-globe"></i> Web Access</h4>
+          <p>Visit <a href="https://parkerrasys.github.io/AutoGrid-Planner" target="_blank" class="code-text">https://parkerrasys.github.io/AutoGrid-Planner</a> to access the AutoGrid Planner.</p>
+        </div>
+        
+        <div class="info-box">
+          <h4><i class="fas fa-laptop-code"></i> System Requirements</h4>
+          <ul>
+            <li>Modern web browser (Chrome, Firefox, Safari, Edge)</li>
+            <li>Internet connection</li>
+            <li>Screen resolution of at least 1024x768 (1920x1080 recommended)</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="getting-started" class="doc-section">
+        <h2><i class="fas fa-play-circle"></i> Getting Started</h2>
+        <p>This section covers the fundamentals of using AutoGrid for your robotics projects. Follow these steps to begin creating your autonomous routines quickly:</p>
+        
+        <div class="step-box">
+          <h4>Step 1: Create a New Project</h4>
+          <p>From the AutoGrid dashboard, click the <span class="ui-element"><i class="fas fa-plus"></i> New Project</span> button and set a name for your path.</p>
+        </div>
+        
+        <div class="step-box">
+          <h4>Step 2: Layout Your Path</h4>
+          <p>Use the Field Editor to place points on the field.</p>
+        </div>
+        
+        <div class="step-box">
+          <h4>Step 3: Export, Share, or Build</h4>
+          <p>Use the three button on the bottom left of the screen to export, share, or build your code.</p>
+        </div>
+        
+        <div class="step-box">
+          <h4>Step 4: Download the AutoGrid Competition Template</h4>
+          <p>Paste your built path into the autonomous funtion in our Competition Template and upload.</p>
+        </div>
+        
+        <div class="step-box">
+          <h4>Step 5: Adjust Values</h4>
+          <p>Fine tune values of your robot such as size, wheel diameter, and gearing to accuratly calculate the built path.</p>
+        </div>
+      </section>
+
+      <section id="core-concepts" class="doc-section">
+        <h2><i class="fas fa-lightbulb"></i> How AutoGrid Works</h2>
+        <p>Understanding these fundamental concepts will help you make the most of AutoGrid's capabilities:</p>
+        
+        <div class="concept-card">
+          <h4><i class="fas fa-calculator"></i> Calculations</h4>
+          <p>The robot calculates the angle and distance it needs to go by making a triangle out of the X and Y distances of the coordinate it is trying to reach before using those values to know where it needs to go.
+          </p>
+        </div>
+<!--         
+        <div class="concept-card">
+          <h4><i class="fas fa-route"></i> Paths</h4>
+          <p>Connections between waypoints that define how your robot moves from one point to another. Paths can be straight lines, curves, or complex maneuvers.</p>
+        </div> -->
+        
+        <!-- <div class="concept-card">
+          <h4><i class="fas fa-cogs"></i> Actions</h4>
+          <p>Commands that control your robot's mechanisms, such as intake systems, lifts, or scoring mechanisms. Actions can be tied to specific waypoints or executed during path traversal.</p>
+        </div> -->
+      </section>
+
+      <section id="features" class="doc-section">
+        <h2><i class="fas fa-star"></i> Key Features</h2>
+        <p>AutoGrid offers a comprehensive set of features designed to streamline your autonomous programming workflow:</p>
+        
+        <div class="feature-grid">          
+          <div class="feature-item">
+            <h4><i class="fas fa-project-diagram"></i> Path Planning</h4>
+            <p>Design complex robot movements with intuitive point-and-click interfaces. (Path optimization coming soon)</p>
+          </div>
+          
+          <div class="feature-item">
+            <h4><i class="fas fa-stopwatch"></i> Simulation</h4>
+            <p>Show a view of how the robot will act on the field by simulating the robots movements.</p>
+          </div>
+          
+          <div class="feature-item">
+            <h4><i class="fas fa-code"></i> Code Generation</h4>
+            <p>Automatically generate autonomous code for the AutoGrid Competition Template to use.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="commands" class="doc-section">
+        <h2><i class="fas fa-terminal"></i> Commands Reference</h2>
+        <p>The AutoGrid Competition Template has a few funtions to call in order to move the robot, these funtions can be used manually or generated based on path input from the AutoGrid Planner.</p>
+        
+        <div class="command-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Command</th>
+                <th>Description</th>
+                <th>Usage Example</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="padding-right: 20px;"><code>setStarting(x, y);</code></td>
+                <td style="padding-right: 20px;">Sets the starting position of the robot</td>
+                <td style="padding-right: 20px;"><code>setStarting(0, 0)</code></td>
+              </tr>
+              <tr>
+                <td style="padding-right: 20px;"><code>moveTo(x, y);</code></td>
+                <td style="padding-right: 20px;">Moves the robot to the specified coordinates</td>
+                <td style="padding-right: 20px;"><code>moveTo(1, 5)</code></td>
+              </tr>
+              <tr>
+                <td style="padding-right: 20px;"><code>lookAt(x, y)</code></td>
+                <td style="padding-right: 20px;">Rotates the robot to face a specific point</td>
+                <td style="padding-right: 20px;"><code>lookAt(4, 3)</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="tips" class="doc-section">
+        <h2><i class="fas fa-lightbulb"></i> Tips & Best Practices</h2>
+        <p>Expert advice to help you get the most out of AutoGrid:</p>
+        
+        <div class="tip-card">
+          <h4>Start Simple</h4>
+          <p>Begin with basic routines and gradually add complexity as you become more familiar with the platform.</p>
+        </div>
+        
+        <div class="tip-card">
+          <h4>Test Incrementally</h4>
+          <p>Deploy and test small portions of your autonomous routine before attempting to run the entire sequence.</p>
+        </div>
+        
+        <div class="tip-card">
+          <h4>Plan for Variability</h4>
+          <p>Design your routines with some tolerance for positioning errors and field variations.</p>
+        </div>
+        
+        <div class="tip-card">
+          <h4>Optimize for Time</h4>
+          <p>Experiment with multiple paths to see what works best with your robot. Timing may vary.</p>
+        </div>
+      </section>
+
+      <!-- <div class="topic-navigation">
+        <a href="#" id="prev-topic" class="topic-nav-button">
+          <i class="fas fa-arrow-left"></i>
+          <div class="nav-content">
+            <span>Previous Topic</span>
+            <strong id="prev-topic-name">Installation Guide</strong>
+          </div>
+        </a>
+        <a href="#" id="next-topic" class="topic-nav-button">
+          <div class="nav-content">
+            <span>Next Topic</span>
+            <strong id="next-topic-name">Field Configuration</strong>
+          </div>
+          <i class="fas fa-arrow-right"></i>
+        </a>
+      </div> -->
+    </main>
+  </div>
+
+  <script>
+    const topic_name = "Documentation";
+    document.addEventListener('DOMContentLoaded', function() {
+      document.title = `Topic: ${topic_name}`;
+      document.getElementById('sidebar_name').textContent = topic_name;
+      document.getElementById('top_name').textContent = topic_name;
+      document.getElementById('title_name').textContent = topic_name;
+
+      // Set up navigation links
+      document.getElementById('prev-topic-name').textContent = "Getting Started";
+      document.getElementById('next-topic-name').textContent = "Field Configuration";
+      
+      // You can dynamically set these links based on your documentation structure
+      document.getElementById('prev-topic').href = "../docs/getting-started.html";
+      document.getElementById('next-topic').href = "../docs/field-configuration.html";
+    });
+
+    function changeTheme(theme) {
+      document.body.setAttribute('data-theme', theme);
+      localStorage.setItem('theme', theme);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const savedTheme = localStorage.getItem('theme') || 'dark';
+      document.body.setAttribute('data-theme', savedTheme);
+      document.getElementById('themeSelector').value = savedTheme;
+    });
+
+    function toggleSidebar() {
+      const sidebar = document.querySelector('.sidebar');
+      sidebar.classList.toggle('active');
+    }
+
+    const delay = 1250;
+    const preloadImage = new Image();
+    preloadImage.src = "../AutoGridAnimationLoop.gif";
+    const logoElement = document.getElementById("logo");
+    setTimeout(() => {
+      logoElement.src = preloadImage.src;
+    }, delay);
+  </script>
+</body>
+
+</html>

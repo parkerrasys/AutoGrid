@@ -70,11 +70,11 @@
   <div class="content-wrapper">
     <nav class="sidebar">
       <div class="sidebar-section">
-        <h3><i class="fas fa-book"></i> Getting Started</h3>
+        <h3><i class="fas fa-book"></i>Getting Started</h3>
         <ul>
           <li><a href="#introduction">Introduction</a></li>
-          <li><a href="#installation">Installation</a></li>
-          <li><a href="#quick-start">Quick Start Guide</a></li>
+          <li><a href="#how-it-works">How it Works</a></li>
+          <li><a href="#quick-start">Quick Overview</a></li>
         </ul>
       </div>
       <div class="sidebar-section">
@@ -92,19 +92,32 @@
         <i class="fas fa-folder"></i><a style="text-decoration: none;" href="../index.html">AutoGrid</a>/<a style="text-decoration: none;" href="../docs/home.html">Documentation Topics</a>
       </div>
 
-      <a style="text-decoration: none;" href="../docs/pagetemplate.html"> <section id="introduction" class="doc-section">
-        <h2><i class="fas fa-info-circle"></i> Introduction</h2>
-        <p>AutoGrid is a powerful tool for planning autonomous routines in robotics competitions. This documentation
-          will help you understand its features and capabilities.</p>
+      <a style="text-decoration: none;" href="../docs/introduction.html"> <section id="introduction" class="doc-section">
+        <h2><i class="fas fa-info-circle"></i>Introduction</h2>
+        <p>AutoGrid is a powerful tool for planning autonomous routines in VEX Robotics. This introduction will walk through what it can do and how it can be used.</p>
       </section> </a>
 
-      <a style="text-decoration: none;" href="../docs/pagetemplate.html"> <section id="installation" class="doc-section">
-        <h2><i class="fas fa-download"></i> Installation</h2>
-        <p>AutoGrid is a web-based application, no installation required. Simply visit the website to get started.</p>
+      <a style="text-decoration: none;" href="../docs/how-it-works.html"> <section id="how-it-works" class="doc-section">
+        <h2><i class="fas fa-download"></i>How AutoGrid Works</h2>
+        <p>This documentation will explain how AutoGrid works at its core. Walking through both the planner and competition template.</p>
+      </section> </a>
+
+      <a style="text-decoration: none;" href="../docs/quick-start.html"> <section id="quick-start" class="doc-section">
+        <h2><i class="fas fa-download"></i>Quick Start to AutoGrid</h2>
+        <p>AutoGrid is a program you will have to get used to. This document will go through the key fundamentals while using AutoGrid.</p>
+      </section> </a>
+
+      <a style="text-decoration: none;" href="../docs/pagetemplate.html"> <section id="quick-start" class="doc-section">
+        <h2><i class="fas fa-download"></i>Test</h2>
+        <p>test</p>
       </section> </a>
     </main>
   </div>
   <script>
+window.onload = function() {
+    window.location.href = '../docs/forcedpage.html';
+};
+
     const delay = 1250;
     const preloadImage = new Image();
 

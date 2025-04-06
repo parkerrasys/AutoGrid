@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="../AutoGridLogo.ico">
+  <link rel="stylesheet" href="../styles/theme.css">
+  <link rel="stylesheet" href="../styles/style.css">
+  <link rel="stylesheet" href="../docs/topic.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <div class="screen-warning">
+    <span class="close-warning" onclick="this.parentElement.style.display='none'">×</span>
+    Screen size may be crowded on this device. Consider rotating your device for a better experience.
+  </div>
+</head>
+
+<body>
+  <header>
+    <div class="logo-title">
+      <img id="logo" class="autogridlogo" src="../AutoGridLogoIntro.gif" alt="AutoGrid Logo">
+      <div class="title">AutoGrid Documentation ~ <i id="title_name"></i></div>
+    </div>
+    <div class="header-buttons">
+      <div class="mobile-dropdown">
+        <select onchange="window.location.href=this.value">
+          <option value="">Links</option>
+          <option value="../index.html">Home</option>
+          <option value="../tutorials/home.html">Tutorials</option>
+          <option value="../docs/home.html">Docs.</option>
+        </select>
+      </div>
+      <a href="../index.html" class="nav-button"><i class="fas fa-home"></i> Home</a>
+      <a href="../tutorials/home.html" class="nav-button"><i class="fas fa-graduation-cap"></i> Tutorials</a>
+      <a href="../docs/home.html" class="nav-button"><i class="fas fa-book"></i> Docs.</a>
+      <select id="themeSelector" onchange="changeTheme(this.value)">
+        <option value="dark">Default Dark</option>
+        <option value="light">Default Light</option>
+        <option value="midnight">Midnight Dream</option>
+        <option value="ocean">Ocean Breeze</option>
+        <option value="forest">Forest Mist</option>
+        <option value="sunset">Too Much Purple</option>
+        <option value="retro">Retro Wave</option>
+        <option value="nord">Classic Grey</option>
+        <option value="mocha">Midnight Purple</option>
+        <option value="cyber">Cyber Punk</option>
+        <option value="devpref">Dev's Preference</option>
+      </select>
+    </div>
+  </header>
+
+  <button class="mobile-menu-btn" onclick="toggleSidebar()">
+    <i class="fas fa-bars"></i>
+  </button>
+  <div class="content-wrapper">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <h3><i class="fas fa-book"></i> <i id="sidebar_name"></i></h3>
+        <ul>
+          <li><a href="#overview">Overview</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="doc-content">
+      <div class="breadcrumb">
+        <i class="fas fa-folder"></i><a style="text-decoration: none;" href="../index.html">AutoGrid</a>/<a style="text-decoration: none;" href="../docs/home.html">Documentation Topics</a>/<a id="top_name" style="text-decoration: none;" href="../docs/how-it-works.html"></a>
+      </div>
+
+      <section id="introduction" class="doc-section">
+        <h2><i class="fas fa-info-circle"></i>Overview</h2>
+        <p>AutoGrid is a powerful tool for planning autonomous routines in robotics competitions. This documentation
+          will help you understand its features and capabilities.</p>
+      </section>
+
+      <section id="installation" class="doc-section">
+        <h2><i class="fas fa-download"></i>Installation</h2>
+        <p>AutoGrid is a web-based application, no installation required. Simply visit the website to get started.</p>
+      </section>
+    </main>
+  </div>
+  <script>
+    const topic_name = "How it Works";
+    document.addEventListener('DOMContentLoaded', function() {
+        document.title = `Topic: ${topic_name}`;
+        document.getElementById('sidebar_name').textContent = topic_name;
+        document.getElementById('top_name').textContent = topic_name;
+        document.getElementById('title_name').textContent = topic_name;
+});
+
+
+function changeTheme(theme) {
+  document.body.setAttribute('data-theme', theme);
+  localStorage.setItem('theme', theme);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const savedTheme = localStorage.getItem('theme') || 'dark';
+  document.body.setAttribute('data-theme', savedTheme);
+  document.getElementById('themeSelector').value = savedTheme;
+});
+function toggleSidebar() {
+  const sidebar = document.querySelector('.sidebar');
+  sidebar.classList.toggle('active');
+}
+
+
+const delay = 1250;
+const preloadImage = new Image();
+
+preloadImage.src = "../AutoGridAnimationLoop.gif";
+
+const logoElement = document.getElementById("logo");
+
+setTimeout(() => {
+  logoElement.src = preloadImage.src;
+}, delay);
+</script>
+</body>
+
+</html>
